@@ -8,9 +8,17 @@ namespace Samples.Font.Exsample
 	*/
 	public sealed class TestScene_Monobehaviour : UnityEngine.MonoBehaviour
 	{
+		/** font
+		*/
+		public BlueBack.Font.Font font;
+
+		/** FONTSIZE
+		*/
+		private const int FONTSIZE = 32;
+
 		/** gl
 		*/
-		private BlueBack.Gl.Gl gl;
+		public BlueBack.Gl.Gl gl;
 
 		/** VIRTUAL_SCREEN
 		*/
@@ -26,6 +34,109 @@ namespace Samples.Font.Exsample
 		public int rendertexture_w;
 		public int rendertexture_h;
 
+		/** textsprite
+		*/
+		public TextSprite textsprite1;
+		public TextSprite textsprite2;
+
+		/** TextSprite
+		*/
+		public sealed class TextSprite : BlueBack.Font.CallBackBeforeApply_Base , BlueBack.Font.CallBackAfterApply_Base , System.IDisposable
+		{
+			/** monobehaviour
+			*/
+			private TestScene_Monobehaviour monobehaviour;
+
+			/** text
+			*/
+			private string text;
+
+			/** spriteindex
+			*/
+			private BlueBack.Gl.SpriteIndex[] spriteindex;
+
+			/** xy
+			*/
+			private int x;
+			private int y;
+
+			/** constructor
+			*/
+			public TextSprite(string a_text,int a_x,int a_y,TestScene_Monobehaviour a_monobehaviour)
+			{
+				BlueBack.Font.Item t_font = a_monobehaviour.font.list[0];
+
+				this.text = a_text;
+				t_font.SetCallBackBeforeApply(this);
+				t_font.SetCallBackAfterApply(this);
+				this.monobehaviour = a_monobehaviour;
+				this.spriteindex = new BlueBack.Gl.SpriteIndex[a_text.Length];
+				for(int ii=0;ii<this.spriteindex.Length;ii++){
+					this.spriteindex[ii] = a_monobehaviour.gl.spritelist[0].CreateSprite();
+				}
+				this.x = a_x;
+				this.y = a_y;
+			}
+
+			/** [System.IDisposable]破棄。
+			*/
+			public void Dispose()
+			{
+				BlueBack.Font.Item t_font = this.monobehaviour.font.list[0];
+
+				t_font.UnSetCallBackBeforeApply(this);
+				t_font.UnSetCallBackAfterApply(this);
+
+				for(int ii=0;ii<this.spriteindex.Length;ii++){
+					this.spriteindex[ii].Dispose();
+				}
+			}
+
+			/** [BlueBack.Font.CallBackPreApply_Base]構築直前。
+			*/
+			public void CallBackBeforeApply()
+			{
+				BlueBack.Font.Item t_font = this.monobehaviour.font.list[0];
+
+				t_font.AddString(this.text.ToString(),FONTSIZE,UnityEngine.FontStyle.Normal);
+			}
+
+			/** [BlueBack.Font.CallBackAfterApply_Base]構築直後。
+			*/
+			public void CallBackAfterApply()
+			{
+				BlueBack.Font.Item t_font = this.monobehaviour.font.list[0];
+
+				UnityEngine.Color t_color = new UnityEngine.Color(1.0f,1.0f,1.0f,1.0f);
+
+				int t_x = this.x;
+				int t_y = this.y;
+
+				for(int ii=0;ii<this.text.Length;ii++){
+					UnityEngine.CharacterInfo t_characterinfo;
+					if(t_font.font.GetCharacterInfo(this.text[ii],out t_characterinfo,FONTSIZE,UnityEngine.FontStyle.Normal) == true){
+						BlueBack.Gl.SpriteTool.SetVisible(this.spriteindex[ii],true);
+						BlueBack.Gl.SpriteTool.SetMaterialIndex(this.spriteindex[ii],0);
+						BlueBack.Gl.SpriteTool.SetTextureIndex(this.spriteindex[ii],0);
+
+						BlueBack.Gl.SpriteTool.SetVertexXY12(this.spriteindex[ii],t_x + t_characterinfo.minX,t_y - t_characterinfo.maxY,t_x + t_characterinfo.maxX,t_y - t_characterinfo.minY,in this.monobehaviour.screenparam);
+						BlueBack.Gl.SpriteTool.SetTexcordXY1234(this.spriteindex[ii],t_characterinfo.uvTopLeft.x,t_characterinfo.uvTopLeft.y,t_characterinfo.uvTopRight.x,t_characterinfo.uvTopRight.y,t_characterinfo.uvBottomRight.x,t_characterinfo.uvBottomRight.y,t_characterinfo.uvBottomLeft.x,t_characterinfo.uvBottomLeft.y);
+						BlueBack.Gl.SpriteTool.SetColor(this.spriteindex[ii],in t_color);
+
+						t_x += t_characterinfo.advance;
+
+						if(t_x + FONTSIZE >= VIRTUAL_SCREEN_W){
+							t_x = this.x;
+							t_y += FONTSIZE;
+						}
+
+					}else{
+						BlueBack.Gl.SpriteTool.SetVisible(this.spriteindex[ii],false);
+					}
+				}
+			}
+		}
+
 		/** Awake
 		*/
 		public void Awake()
@@ -37,13 +148,26 @@ namespace Samples.Font.Exsample
 			//screenparam
 			this.screenparam = BlueBack.Gl.ScreenTool.CreateScreenParamWidthStretch(VIRTUAL_SCREEN_W,VIRTUAL_SCREEN_H,this.rendertexture_w,this.rendertexture_h);
 
+			//font
+			{
+				BlueBack.Font.InitParam t_initparam = BlueBack.Font.InitParam.CreateDefault();
+				{
+					t_initparam.stringbuffer_capacity = 1024;
+					t_initparam.font = new UnityEngine.Font[]{
+						UnityEngine.Font.CreateDynamicFontFromOSFont("xxxx",FONTSIZE),
+					};
+				}
+
+				this.font = new BlueBack.Font.Font(in t_initparam);
+			}
+
 			//gl
 			{
 				BlueBack.Gl.InitParam t_initparam = BlueBack.Gl.InitParam.CreateDefault();
 				{
 					t_initparam.spritelist_max = 2;
-					t_initparam.texture_max = 2;
-					t_initparam.material_max = 2;
+					t_initparam.texture_max = 1;
+					t_initparam.material_max = 1;
 					t_initparam.sprite_max = 100;
 				}
 				this.gl = new BlueBack.Gl.Gl(in t_initparam);
@@ -52,23 +176,54 @@ namespace Samples.Font.Exsample
 				#if(DEF_BLUEBACK_GL_DEBUGVIEW)
 				BlueBack.Gl.Sprite_DebugView_MonoBehaviour.SetScreenParam(in this.screenparam);
 				#endif
+
+				//texturelist
+				this.gl.texturelist.list[0] = this.font.list[0].font.material.mainTexture;
 					
 				//materialexecutelist
-				this.gl.materialexecutelist.list[0] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("opaque"));
-				this.gl.materialexecutelist.list[1] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("transparent"));
+				this.gl.materialexecutelist.list[0] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("Font_Simple"));
 			}
+
+			//textsprite
+			this.textsprite1 = new TextSprite("あいうえおかきくけこさいすせそたちつてとなにぬねのはひふへほまみむめもやゆよわをんabcdefghkjklmnopqrstuvwxyz0123456789",100,100,this);
+
+			//textsprite
+			this.textsprite2 = new TextSprite("<>@*",500,500,this);
+		}
+
+		/** Start
+		*/
+		private void Start()
+		{
+			this.font.list[0].ClearTextureHashSet();
+			this.font.list[0].Apply();
 		}
 
 		/** Update
 		*/
-		public void Update()
+		private void Update()
 		{
 		}
 
 		/** OnDestroy
 		*/
-		public void OnDestroy()
+		private void OnDestroy()
 		{
+			if(this.textsprite1 != null){
+				this.textsprite1.Dispose();
+				this.textsprite1 = null;
+			}
+
+			if(this.textsprite2 != null){
+				this.textsprite2.Dispose();
+				this.textsprite2 = null;
+			}
+
+			if(this.font != null){
+				this.font.Dispose();
+				this.font = null;
+			}
+
 			if(this.gl != null){
 				this.gl.Dispose();
 				this.gl = null;
