@@ -6,7 +6,7 @@
     "git_path":"BlueBackFont/Assets/UPM",
     "discription_simple":"フォント操作",
     "discription_detal":[
-        "スプライト表示",
+        "RequestCharactersInTexture",
     ],
     "keyword":[
         "font"
@@ -14,7 +14,7 @@
     "changelog":[
         "# Changelog",
         "",
-        "## [0.0.0] - 2021-12-13",
+        "## [0.0.0] - 2022-02-14",
         "### Changes",
         "- Init",
         ""
