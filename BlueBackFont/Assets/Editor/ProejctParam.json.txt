@@ -25,16 +25,6 @@
         "define_list":[
         ],
         "reference_list":[
-            {
-                "use":"use",
-                "package_fullname":"BlueBack.PoolList",
-                "url":"https://github.com/bluebackblue/UpmUnityPoolList"
-            },
-            {
-                "use":"use",
-                "package_fullname":"BlueBack.Gl",
-                "url":"https://github.com/bluebackblue/UpmGl"
-            }
         ]
     },
     "asmdef_editor":{

@@ -7,8 +7,6 @@ MIT License
 
 ## 依存 / 使用ライセンス等
 ### ランタイム
-* https://github.com/bluebackblue/UpmUnityPoolList
-* https://github.com/bluebackblue/UpmGl
 ### エディター
 * https://github.com/bluebackblue/UpmFont
 ### サンプル
@@ -20,7 +18,7 @@ Unity 2022.1.0b2
 
 ## UPM
 ### 最新
-* https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM#0.0.1
+* https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM#0.0.2
 ### 開発
 * https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM
 
