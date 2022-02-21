@@ -107,21 +107,35 @@ namespace Samples.Font.Exsample
 			{
 				BlueBack.Font.Item t_font = this.monobehaviour.font.list[0];
 
-				UnityEngine.Color t_color = new UnityEngine.Color(1.0f,1.0f,1.0f,1.0f);
-
 				int t_x = this.x;
 				int t_y = this.y;
 
 				for(int ii=0;ii<this.text.Length;ii++){
+					ref BlueBack.Gl.SpriteBuffer t_spritebuffer = ref this.spriteindex[ii].GetSpriteBuffer();
 					UnityEngine.CharacterInfo t_characterinfo;
 					if(t_font.font.GetCharacterInfo(this.text[ii],out t_characterinfo,FONTSIZE,UnityEngine.FontStyle.Normal) == true){
-						BlueBack.Gl.SpriteTool.SetVisible(this.spriteindex[ii],true);
-						BlueBack.Gl.SpriteTool.SetMaterialIndex(this.spriteindex[ii],0);
-						BlueBack.Gl.SpriteTool.SetTextureIndex(this.spriteindex[ii],0);
 
-						BlueBack.Gl.SpriteTool.SetVertexXY12(this.spriteindex[ii],t_x + t_characterinfo.minX,t_y - t_characterinfo.maxY,t_x + t_characterinfo.maxX,t_y - t_characterinfo.minY,in this.monobehaviour.screenparam);
-						BlueBack.Gl.SpriteTool.SetTexcordXY1234(this.spriteindex[ii],t_characterinfo.uvTopLeft.x,t_characterinfo.uvTopLeft.y,t_characterinfo.uvTopRight.x,t_characterinfo.uvTopRight.y,t_characterinfo.uvBottomRight.x,t_characterinfo.uvBottomRight.y,t_characterinfo.uvBottomLeft.x,t_characterinfo.uvBottomLeft.y);
-						BlueBack.Gl.SpriteTool.SetColor(this.spriteindex[ii],in t_color);
+						t_spritebuffer.visible = true;
+						t_spritebuffer.material_index = 0;
+						t_spritebuffer.texture_index = 0;
+						t_spritebuffer.color = new UnityEngine.Color(1.0f,1.0f,1.0f,1.0f);
+
+						t_spritebuffer.texcord = Unity.Mathematics.math.float2x4(
+							Unity.Mathematics.math.float2(t_characterinfo.uvTopLeft.x,t_characterinfo.uvTopLeft.y),
+							Unity.Mathematics.math.float2(t_characterinfo.uvTopRight.x,t_characterinfo.uvTopRight.y),
+							Unity.Mathematics.math.float2(t_characterinfo.uvBottomRight.x,t_characterinfo.uvBottomRight.y),
+							Unity.Mathematics.math.float2(t_characterinfo.uvBottomLeft.x,t_characterinfo.uvBottomLeft.y)
+						);
+
+						BlueBack.Gl.SpriteTool.SetVertex(
+							ref t_spritebuffer,
+							Unity.Mathematics.math.float2x2(
+								Unity.Mathematics.math.float2(t_characterinfo.minX,- t_characterinfo.maxY),
+								Unity.Mathematics.math.float2(t_characterinfo.maxX,- t_characterinfo.minY)
+							),
+							Unity.Mathematics.math.float2(t_x,t_y),
+							in this.spriteindex[ii].spritelist.gl.screenparam
+						);
 
 						t_x += t_characterinfo.advance;
 
@@ -131,7 +145,7 @@ namespace Samples.Font.Exsample
 						}
 
 					}else{
-						BlueBack.Gl.SpriteTool.SetVisible(this.spriteindex[ii],false);
+						t_spritebuffer.visible = false;
 					}
 				}
 			}

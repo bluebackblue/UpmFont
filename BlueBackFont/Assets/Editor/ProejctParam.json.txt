@@ -51,6 +51,11 @@
                 "use":"use",
                 "package_fullname":"BlueBack.Gl",
                 "url":"https://github.com/bluebackblue/UpmGl"
+            },
+            {
+                "use":"use",
+                "package_fullname":"Unity.Mathematics",
+                "url":"https://docs.unity3d.com/Packages/com.unity.mathematics@latest/index.html"
             }
         ]
     }

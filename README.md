@@ -12,13 +12,14 @@ MIT License
 ### サンプル
 * https://github.com/bluebackblue/UpmFont
 * https://github.com/bluebackblue/UpmGl
+* https://docs.unity3d.com/Packages/com.unity.mathematics@latest/index.html
 
 ## 動作確認
 Unity 2022.1.0b2
 
 ## UPM
 ### 最新
-* https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM#0.0.3
+* https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM#0.0.4
 ### 開発
 * https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM
 

@@ -5,28 +5,28 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "79e82120a80bf1776c905b0fecff4e56ca9b9138"
+      "hash": "5437075d7484b39e50d29b3dfe9cc489eaff32ca"
     },
     "blueback.code": {
       "version": "https://github.com/bluebackblue/UpmCode.git?path=BlueBackCode/Assets/UPM",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "eb60bf6f3769e2a755cd917ac1966645dbdfb1f3"
+      "hash": "fa8f65845a6872803be009de1ff1b5a0061db6f9"
     },
     "blueback.gl": {
       "version": "https://github.com/bluebackblue/UpmGl.git?path=BlueBackGl/Assets/UPM",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4687e4be70bbd24911be7c83b9f88a16e9f3355b"
+      "hash": "6905caef74a277ff4467b7e6e023fe514e78931a"
     },
     "blueback.jsonitem": {
       "version": "https://github.com/bluebackblue/UpmJsonItem.git?path=BlueBackJsonItem/Assets/UPM",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "4fe828c644b3206e8a21c5e81a127fd8317779f2"
+      "hash": "7348ed51c15f6883bf2ee105d1cf1bcdbb4aed6a"
     },
     "blueback.poollist": {
       "version": "https://github.com/bluebackblue/UpmPoolList.git?path=BlueBackPoolList/Assets/UPM#0.0.2",
@@ -40,14 +40,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e0de08332f18de05f3e0dfa5d2cd01c41428432e"
+      "hash": "d6c05d133dd8a5d18f31d8d11bb23d23c0dab511"
     },
     "blueback.versionmanager": {
       "version": "https://github.com/bluebackblue/UpmVersionManager.git?path=BlueBackVersionManager/Assets/UPM",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "8fd08535802f1a9f3ec0b11eb36e63ab3193762e"
+      "hash": "a233b113026a9cf703ab9ec124e7715cc1e4d3fa"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -63,6 +63,13 @@
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.mathematics": {
+      "version": "1.2.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {

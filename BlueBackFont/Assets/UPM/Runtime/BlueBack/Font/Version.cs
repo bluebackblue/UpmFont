@@ -21,7 +21,7 @@ namespace BlueBack.Font
 
 		/** packageversion
 		*/
-		public const string packageversion = "0.0.3";
+		public const string packageversion = "0.0.4";
 
 		/** GetPackageVersion
 		*/
