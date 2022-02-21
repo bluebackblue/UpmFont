@@ -1,9 +1,9 @@
 
 
 /**
- * Copyright (c) blueback
- * Released under the MIT License
- * @brief 初期化パラメータ。
+	Copyright (c) blueback
+	Released under the MIT License
+	@brief 初期化パラメータ。
 */
 
 
