@@ -1,10 +1,10 @@
 
 
-/** @brief フォント。シンプル。
+/** @brief フォント。
 */
 
 
-Shader "Font/Simple"
+Shader "BlueBack/Font/Samples/Simple/Font"
 {
     Properties
     {

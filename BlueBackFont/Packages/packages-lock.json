@@ -5,21 +5,21 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "5437075d7484b39e50d29b3dfe9cc489eaff32ca"
+      "hash": "eec9f9f286fee45881c0ff264ad3c2efaae0a17e"
     },
     "blueback.code": {
       "version": "https://github.com/bluebackblue/UpmCode.git?path=BlueBackCode/Assets/UPM",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "fa8f65845a6872803be009de1ff1b5a0061db6f9"
+      "hash": "b9b916bdd01816d8012fe2f12a0e9402227ec518"
     },
     "blueback.gl": {
       "version": "https://github.com/bluebackblue/UpmGl.git?path=BlueBackGl/Assets/UPM",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "6905caef74a277ff4467b7e6e023fe514e78931a"
+      "hash": "0a9353f2959854cdfbb46422ea7b92df9b334722"
     },
     "blueback.jsonitem": {
       "version": "https://github.com/bluebackblue/UpmJsonItem.git?path=BlueBackJsonItem/Assets/UPM",
@@ -47,7 +47,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a233b113026a9cf703ab9ec124e7715cc1e4d3fa"
+      "hash": "15d89d5725d5750b8520b4b6f9e447a3e513de38"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -82,6 +82,15 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.unity.ugui": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0"
+      }
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
