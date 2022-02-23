@@ -36,9 +36,9 @@ namespace BlueBack.Font.Samples.Simple
 		public int spriteindex_x;
 		public int spriteindex_y;
 
-		/** stringkey
+		/** charkey
 		*/
-		public BlueBack.Font.Key_CodeSizeStyle[] stringkey;
+		public BlueBack.Font.CharKey[] charkey;
 
 		/** Awake
 		*/
@@ -99,8 +99,8 @@ namespace BlueBack.Font.Samples.Simple
 			this.font.SetCallBackAfterApply(this);
 
 			//文字列。
-			this.stringkey = new BlueBack.Font.Key_CodeSizeStyle[]{
-				new Key_CodeSizeStyle('あ',FONTSIZE,UnityEngine.FontStyle.Normal)
+			this.charkey = new BlueBack.Font.CharKey[]{
+				new CharKey('あ',FONTSIZE,UnityEngine.FontStyle.Normal)
 			};
 
 			//構築。
@@ -122,7 +122,7 @@ namespace BlueBack.Font.Samples.Simple
 		public void CallBackBeforeApplyWithDirty(bool[] a_dirtyflag)
 		{
 			if(a_dirtyflag[FONTINDEX] == true){
-				this.font.AddString(FONTINDEX,this.stringkey);
+				this.font.AddString(FONTINDEX,this.charkey);
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace BlueBack.Font.Samples.Simple
 
 			if((this.spriteindex_create==false)||(a_rebultflag[FONTINDEX]==true)){
 				UnityEngine.CharacterInfo t_characterinfo;
-				if(this.font.GetCharacterInfo(FONTINDEX,this.stringkey[0],out t_characterinfo) == true){
+				if(this.font.GetCharacterInfo(FONTINDEX,this.charkey[0],out t_characterinfo) == true){
 					if(this.spriteindex_create == false){
 						t_spritebuffer.visible = true;
 						t_spritebuffer.material_index = 0;

@@ -147,13 +147,13 @@ namespace BlueBack.Font
 
 		/** GetCharacterInfo
 		*/
-		public bool GetCharacterInfo(int a_fontindex,Key_CodeSizeStyle a_key,out UnityEngine.CharacterInfo a_characterinfo){
+		public bool GetCharacterInfo(int a_fontindex,CharKey a_key,out UnityEngine.CharacterInfo a_characterinfo){
 			return this.list[a_fontindex].raw.GetCharacterInfo(a_key.code,out a_characterinfo,a_key.fontsize,a_key.fontstyle);
 		}
 
 		/** AddString
 		*/
-		public void AddString(int a_fontindex,Key_CodeSizeStyle[] a_string)
+		public void AddString(int a_fontindex,CharKey[] a_string)
 		{
 			this.list[a_fontindex].AddString(a_string);
 		}

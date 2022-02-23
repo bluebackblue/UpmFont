@@ -11,9 +11,9 @@
 */
 namespace BlueBack.Font
 {
-	/** Key_CodeSizeStyle
+	/** CharKey
 	*/
-	public readonly struct Key_CodeSizeStyle : System.IEquatable<Key_CodeSizeStyle>
+	public readonly struct CharKey : System.IEquatable<CharKey>
 	{
 		/** code
 		*/
@@ -29,7 +29,7 @@ namespace BlueBack.Font
 
 		/** constructor
 		*/
-		public Key_CodeSizeStyle(char a_code,int a_fontsize,UnityEngine.FontStyle a_fontstyle)
+		public CharKey(char a_code,int a_fontsize,UnityEngine.FontStyle a_fontstyle)
 		{
 			//code
 			this.code = a_code;
@@ -43,19 +43,19 @@ namespace BlueBack.Font
 
 		/** [System.IEquatable<T>]Equals
 		*/
-		public bool Equals(Key_CodeSizeStyle a_object)
+		public bool Equals(CharKey a_object)
 		{
 			if((this.code == a_object.code)&&(this.fontsize == a_object.fontsize)&&(this.fontstyle == a_object.fontstyle)){
 
 				#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-				DebugTool.Log("Key_CodeSizeStyle : Equals(Key_CodeSizeStyle) : true");
+				DebugTool.Log("CharKey : Equals(CharKey) : true");
 				#endif
 
 				return true;
 			}
 
 			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log("Key_CodeSizeStyle : Equals(Key_CodeSizeStyle) : false");
+			DebugTool.Log("CharKey : Equals(CharKey) : false");
 			#endif
 
 			return false;
@@ -63,19 +63,19 @@ namespace BlueBack.Font
 
 		/** [static]==
 		*/
-		public static bool operator ==(Key_CodeSizeStyle a_object_l,Key_CodeSizeStyle a_object_r)
+		public static bool operator ==(CharKey a_object_l,CharKey a_object_r)
 		{
 			if((a_object_l.code == a_object_r.code)&&(a_object_l.fontsize == a_object_r.fontsize)&&(a_object_l.fontstyle == a_object_r.fontstyle)){
 
 				#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-				DebugTool.Log("Key_CodeSizeStyle : static== : true");
+				DebugTool.Log("CharKey : static== : true");
 				#endif
 
 				return true;
 			}
 
 			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log("Key_CodeSizeStyle : static== : false");
+			DebugTool.Log("CharKey : static== : false");
 			#endif
 
 			return false;
@@ -83,19 +83,19 @@ namespace BlueBack.Font
 
 		/** [static]!=
 		*/
-		public static bool operator !=(Key_CodeSizeStyle a_object_l,Key_CodeSizeStyle a_object_r)
+		public static bool operator !=(CharKey a_object_l,CharKey a_object_r)
 		{
 			if((a_object_l.code == a_object_r.code)&&(a_object_l.fontsize == a_object_r.fontsize)&&(a_object_l.fontstyle == a_object_r.fontstyle)){
 
 				#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-				DebugTool.Log("Key_CodeSizeStyle : static!= : false");
+				DebugTool.Log("CharKey : static!= : false");
 				#endif
 
 				return false;
 			}
 
 			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log("Key_CodeSizeStyle : static!= : true");
+			DebugTool.Log("CharKey : static!= : true");
 			#endif
 
 			return true;
@@ -108,7 +108,7 @@ namespace BlueBack.Font
 			int t_hash = (this.code,this.fontsize,(int)this.fontstyle).GetHashCode();
 
 			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log(string.Format("Key_CodeSizeStyle : GetHashCode : {0} : {1} : {2} : {3}",this.code,this.fontsize,this.fontstyle,t_hash));
+			DebugTool.Log(string.Format("CharKey : GetHashCode : {0} : {1} : {2} : {3}",this.code,this.fontsize,this.fontstyle,t_hash));
 			#endif
 
 			return t_hash;
@@ -116,12 +116,12 @@ namespace BlueBack.Font
 
 		/** CompareTo
 		*/
-		public int CompareTo(Key_CodeSizeStyle a_object)
+		public int CompareTo(CharKey a_object)
 		{
 			int t_ret = (this.code,this.fontsize,(int)this.fontstyle).CompareTo((a_object.code,a_object.fontsize,(int)a_object.fontstyle));
 
 			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log(string.Format("Key_CodeSizeStyle : CompareTo : {0}",t_ret));
+			DebugTool.Log(string.Format("CharKey : CompareTo : {0}",t_ret));
 			#endif
 
 			return t_ret;
@@ -139,11 +139,11 @@ namespace BlueBack.Font
 		public override bool Equals(object a_object)
 		{
 			if(a_object != null){
-				Key_CodeSizeStyle t_object = (Key_CodeSizeStyle)a_object;
+				CharKey t_object = (CharKey)a_object;
 				if((this.code == t_object.code)&&(this.fontsize == t_object.fontsize)&&(this.fontstyle == t_object.fontstyle)){
 
 					#if(DEF_BLUEBACK_FONT_ASSERT)
-					DebugTool.Assert(false,"Key_CodeSizeStyle : Equals(object) : true");
+					DebugTool.Assert(false,"CharKey : Equals(object) : true");
 					#endif
 
 					return true;
@@ -151,7 +151,7 @@ namespace BlueBack.Font
 			}
 
 			#if(DEF_BLUEBACK_FONT_ASSERT)
-			DebugTool.Assert(false,"Key_CodeSizeStyle : Equals(object) : false");
+			DebugTool.Assert(false,"CharKey : Equals(object) : false");
 			#endif
 
 			return false;
