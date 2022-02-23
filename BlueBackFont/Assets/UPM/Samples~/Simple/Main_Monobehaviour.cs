@@ -20,6 +20,10 @@ namespace BlueBack.Font.Samples.Simple
 		*/
 		public const int FONTSIZE = 64;
 
+		/** FONTINDEX
+		*/
+		public const int FONTINDEX = 0;
+
 		/** VIRTUAL_SCREEN
 		*/
 		public const int VIRTUAL_SCREEN_W = 1280;
@@ -67,7 +71,7 @@ namespace BlueBack.Font.Samples.Simple
 				#endif
 
 				//texturelist
-				this.gl.texturelist.list[0] = this.font.list[0].font.material.mainTexture;
+				this.gl.texturelist.list[0] = this.font.fontlist[FONTINDEX].font.material.mainTexture;
 					
 				//materialexecutelist
 				this.gl.materialexecutelist.list[0] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("Simple/Font"));
@@ -76,7 +80,7 @@ namespace BlueBack.Font.Samples.Simple
 			//uitext
 			{
 				UnityEngine.UI.Text t_uitext = UnityEngine.GameObject.Find("Text").GetComponent<UnityEngine.UI.Text>();
-				t_uitext.font = this.font.list[0].font;
+				t_uitext.font = this.font.fontlist[FONTINDEX].font;
 			}
 
 			//スプライト作成。
@@ -85,28 +89,30 @@ namespace BlueBack.Font.Samples.Simple
 			this.spriteindex = this.gl.spritelist[0].CreateSprite(false,0,0);
 
 			//コールバック登録。
-			this.font.list[0].SetCallBackBeforeApply(this);
-			this.font.list[0].SetCallBackAfterApply(this);
+			this.font.fontlist[FONTINDEX].SetCallBackBeforeApply(this);
+			this.font.fontlist[FONTINDEX].SetCallBackAfterApply(this);
 
 			//構築。
-			this.font.list[0].ClearTextureHashSet();
-			this.font.list[0].Apply();
+			this.font.fontlist[FONTINDEX].ClearTextureHashSet();
+			this.font.fontlist[FONTINDEX].Apply();
 		}
 
 		/** [BlueBack.Font.CallBackPreApply_Base]構築直前。
 		*/
-		public void CallBackBeforeApply()
+		public void CallBackBeforeApply(int a_fontindex)
 		{
-			this.font.list[0].AddString("あ".ToString(),FONTSIZE,UnityEngine.FontStyle.Normal);
+			if(a_fontindex == FONTINDEX){
+				this.font.fontlist[a_fontindex].AddString("あ".ToString(),FONTSIZE,UnityEngine.FontStyle.Normal);
+			}
 		}
 
 		/** [BlueBack.Font.CallBackAfterApply_Base]構築直後。
 		*/
-		public void CallBackAfterApply()
+		public void CallBackAfterApply(int a_fontindex)
 		{
 			ref BlueBack.Gl.SpriteBuffer t_spritebuffer = ref this.spriteindex.GetSpriteBuffer();
 			UnityEngine.CharacterInfo t_characterinfo;
-			if(this.font.list[0].font.GetCharacterInfo('あ',out t_characterinfo,FONTSIZE,UnityEngine.FontStyle.Normal) == true){
+			if(this.font.fontlist[a_fontindex].font.GetCharacterInfo('あ',out t_characterinfo,FONTSIZE,UnityEngine.FontStyle.Normal) == true){
 
 				t_spritebuffer.visible = true;
 				t_spritebuffer.material_index = 0;
@@ -141,8 +147,8 @@ namespace BlueBack.Font.Samples.Simple
 		private void OnDestroy()
 		{
 			if(this.font != null){
-				this.font.list[0].UnSetCallBackBeforeApply(this);
-				this.font.list[0].UnSetCallBackAfterApply(this);
+				this.font.fontlist[FONTINDEX].UnSetCallBackBeforeApply(this);
+				this.font.fontlist[FONTINDEX].UnSetCallBackAfterApply(this);
 			}
 
 			if(this.spriteindex != null){

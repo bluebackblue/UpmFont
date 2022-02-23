@@ -123,7 +123,7 @@ namespace BlueBack.Font
 			{
 				int ii_max = this.callback_beforeapply.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_beforeapply[ii].CallBackBeforeApply();
+					this.callback_beforeapply[ii].CallBackBeforeApply(ii);
 				}
 			}
 
@@ -143,7 +143,7 @@ namespace BlueBack.Font
 			{
 				int ii_max = this.callback_afterapply.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_afterapply[ii].CallBackAfterApply();
+					this.callback_afterapply[ii].CallBackAfterApply(ii);
 				}
 			}
 		}

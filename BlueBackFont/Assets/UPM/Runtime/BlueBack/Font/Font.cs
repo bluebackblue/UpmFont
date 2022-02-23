@@ -19,31 +19,31 @@ namespace BlueBack.Font
 		*/
 		private Device device;
 
-		/** list
+		/** fontlist
 		*/
-		public Item[] list;
+		public Item[] fontlist;
 
 		/** constructor
 		*/
 		public Font(in InitParam a_initparam)
 		{
-			//list
-			this.list = new Item[a_initparam.font.Length];
-			int ii_max = this.list.Length;
+			//fontlist
+			this.fontlist = new Item[a_initparam.font.Length];
+			int ii_max = this.fontlist.Length;
 			for(int ii=0;ii<ii_max;ii++){
-				this.list[ii] = new Item(in a_initparam,ii);
+				this.fontlist[ii] = new Item(in a_initparam,ii);
 			}
 
 			//device
-			this.device = new Device(this.list);
+			this.device = new Device(this.fontlist);
 		}
 
 		/** [IDisposable]Dispose。
 		*/
 		public void Dispose()
 		{
-			//list
-			this.list = null;
+			//fontlist
+			this.fontlist = null;
 
 			//device
 			if(this.device != null){
