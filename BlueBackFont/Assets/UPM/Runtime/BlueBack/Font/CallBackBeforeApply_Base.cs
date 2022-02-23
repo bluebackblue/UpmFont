@@ -17,7 +17,7 @@ namespace BlueBack.Font
 	{
 		/** [BlueBack.Font.CallBackPreApply_Base]構築直前。
 		*/
-		void CallBackBeforeApply(int a_fontindex);
+		void CallBackBeforeApply();
 	}
 }
 

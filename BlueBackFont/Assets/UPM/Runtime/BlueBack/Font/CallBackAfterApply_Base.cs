@@ -16,8 +16,11 @@ namespace BlueBack.Font
 	public interface CallBackAfterApply_Base
 	{
 		/** [BlueBack.Font.CallBackAfterApply_Base]構築直後。
+
+			a_rebultflag		: フォントごとの再構築フラグ。
+
 		*/
-		void CallBackAfterApply(int a_fontindex);
+		void CallBackAfterApply(bool[] a_rebultflag);
 	}
 }
 

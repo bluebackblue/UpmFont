@@ -47,14 +47,14 @@ namespace BlueBack.Font
 		{
 			if((this.code == a_object.code)&&(this.fontsize == a_object.fontsize)&&(this.fontstyle == a_object.fontstyle)){
 
-				#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+				#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 				DebugTool.Log("Key_CodeSizeStyle : Equals(Key_CodeSizeStyle) : true");
 				#endif
 
 				return true;
 			}
 
-			#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 			DebugTool.Log("Key_CodeSizeStyle : Equals(Key_CodeSizeStyle) : false");
 			#endif
 
@@ -67,14 +67,14 @@ namespace BlueBack.Font
 		{
 			if((a_object_l.code == a_object_r.code)&&(a_object_l.fontsize == a_object_r.fontsize)&&(a_object_l.fontstyle == a_object_r.fontstyle)){
 
-				#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+				#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 				DebugTool.Log("Key_CodeSizeStyle : static== : true");
 				#endif
 
 				return true;
 			}
 
-			#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 			DebugTool.Log("Key_CodeSizeStyle : static== : false");
 			#endif
 
@@ -87,14 +87,14 @@ namespace BlueBack.Font
 		{
 			if((a_object_l.code == a_object_r.code)&&(a_object_l.fontsize == a_object_r.fontsize)&&(a_object_l.fontstyle == a_object_r.fontstyle)){
 
-				#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+				#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 				DebugTool.Log("Key_CodeSizeStyle : static!= : false");
 				#endif
 
 				return false;
 			}
 
-			#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 			DebugTool.Log("Key_CodeSizeStyle : static!= : true");
 			#endif
 
@@ -107,7 +107,7 @@ namespace BlueBack.Font
 		{
 			int t_hash = (this.code,this.fontsize,(int)this.fontstyle).GetHashCode();
 
-			#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 			DebugTool.Log(string.Format("Key_CodeSizeStyle : GetHashCode : {0} : {1} : {2} : {3}",this.code,this.fontsize,this.fontstyle,t_hash));
 			#endif
 
@@ -120,7 +120,7 @@ namespace BlueBack.Font
 		{
 			int t_ret = (this.code,this.fontsize,(int)this.fontstyle).CompareTo((a_object.code,a_object.fontsize,(int)a_object.fontstyle));
 
-			#if(DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG)
+			#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 			DebugTool.Log(string.Format("Key_CodeSizeStyle : CompareTo : {0}",t_ret));
 			#endif
 
