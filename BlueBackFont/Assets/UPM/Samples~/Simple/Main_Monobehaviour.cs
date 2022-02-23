@@ -6,7 +6,7 @@ namespace BlueBack.Font.Samples.Simple
 {
 	/** Main_Monobehaviour
 	*/
-	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeApplyWithDirty_Base , BlueBack.Font.CallBackAfterApply_Base
+	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeBuildWithDirty_Base , BlueBack.Font.CallBackAfterBuild_Base
 	{
 		/** font
 		*/
@@ -95,47 +95,46 @@ namespace BlueBack.Font.Samples.Simple
 			this.spriteindex_create = false;
 
 			//コールバック登録。
-			this.font.SetCallBackBeforeApplyWithDirty(this);
-			this.font.SetCallBackAfterApply(this);
+			this.font.SetCallBackBeforeBuildWithDirty(this);
+			this.font.SetCallBackAfterBuild(this);
 
 			//文字列。
 			this.charkey = new BlueBack.Font.CharKey[]{
 				new CharKey('あ',FONTSIZE,UnityEngine.FontStyle.Normal)
 			};
 
-			//構築。
-			this.font.StartApply();
+			//ビルド。
+			this.font.StartBuild();
 			this.font.SetDirty(FONTINDEX);
 			{
 				//文字列追加。
 			}
-			this.font.EndApply();
+			this.font.EndBuild();
 		}
 
-		/** [BlueBack.Font.CallBackBeforeApplyWithDirty_Base]構築直前。
+		/** [BlueBack.Font.CallBackBeforeBuildWithDirty_Base]ビルド直前。
 
-			a_dirtyflag				: フラグの立っていないフォントは再構築されない。
-
-			すべてのCallBackBeforeApplyが呼び出された後に呼び出される。
+			フラグの立っていないフォントはビルドされない。
+			すべてのCallBackBeforeBuildが呼び出された後に呼び出される。
 
 		*/
-		public void CallBackBeforeApplyWithDirty(bool[] a_dirtyflag)
+		public void CallBackBeforeBuildWithDirty(bool[] a_dirtyflag)
 		{
 			if(a_dirtyflag[FONTINDEX] == true){
 				this.font.AddString(FONTINDEX,this.charkey);
 			}
 		}
 
-		/** [BlueBack.Font.CallBackAfterApply_Base]構築直後。
+		/** [BlueBack.Font.CallBackAfterBuild_Base]ビルド直後。
 
-			a_rebultflag		: フォントごとの再構築フラグ。
+			a_rebultflag : ビルド完了フラグ。
 
 		*/
-		public void CallBackAfterApply(bool[] a_rebultflag)
+		public void CallBackAfterBuild(bool[] a_buildflag)
 		{
 			ref BlueBack.Gl.SpriteBuffer t_spritebuffer = ref this.spriteindex.GetSpriteBuffer();
 
-			if((this.spriteindex_create==false)||(a_rebultflag[FONTINDEX]==true)){
+			if((this.spriteindex_create==false)||(a_buildflag[FONTINDEX]==true)){
 				UnityEngine.CharacterInfo t_characterinfo;
 				if(this.font.GetCharacterInfo(FONTINDEX,this.charkey[0],out t_characterinfo) == true){
 					if(this.spriteindex_create == false){
@@ -173,8 +172,8 @@ namespace BlueBack.Font.Samples.Simple
 		private void OnDestroy()
 		{
 			if(this.font != null){
-				this.font.UnSetCallBackBeforeApplyWithDirty(this);
-				this.font.UnSetCallBackAfterApply(this);
+				this.font.UnSetCallBackBeforeBuildWithDirty(this);
+				this.font.UnSetCallBackAfterBuild(this);
 			}
 
 			if(this.spriteindex != null){

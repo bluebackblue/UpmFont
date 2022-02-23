@@ -19,9 +19,9 @@ namespace BlueBack.Font
 		*/
 		private Item[] list;
 
-		/** rebultflag
+		/** buildflag
 		*/
-		private bool[] rebultflag;
+		private bool[] buildflag;
 
 		/** dirtyflag
 		*/
@@ -29,9 +29,9 @@ namespace BlueBack.Font
 
 		/** callback
 		*/
-		private System.Collections.Generic.List<CallBackBeforeApply_Base> callback_beforeapply;
-		private System.Collections.Generic.List<CallBackBeforeApplyWithDirty_Base> callback_beforeapply_withdirty;
-		private System.Collections.Generic.List<CallBackAfterApply_Base> callback_afterapply;
+		private System.Collections.Generic.List<CallBackBeforeBuild_Base> callback_before;
+		private System.Collections.Generic.List<CallBackBeforeBuildWithDirty_Base> callback_before_withdirty;
+		private System.Collections.Generic.List<CallBackAfterBuild_Base> callback_after;
 
 		/** constructor
 		*/
@@ -40,8 +40,8 @@ namespace BlueBack.Font
 			//list
 			this.list = new Item[a_initparam.font.Length];
 
-			//rebultflag
-			this.rebultflag = new bool[a_initparam.font.Length]; 
+			//buildflag
+			this.buildflag = new bool[a_initparam.font.Length]; 
 
 			//dirtyflag
 			this.dirtyflag = new bool[a_initparam.font.Length]; 
@@ -49,14 +49,14 @@ namespace BlueBack.Font
 			int ii_max = a_initparam.font.Length;
 			for(int ii=0;ii<ii_max;ii++){
 				this.list[ii] = new Item(in a_initparam,ii);
-				this.rebultflag[ii] = false;
+				this.buildflag[ii] = false;
 				this.dirtyflag[ii] = false;
 			}
 
 			//callback
-			this.callback_beforeapply = new System.Collections.Generic.List<CallBackBeforeApply_Base>();
-			this.callback_beforeapply_withdirty = new System.Collections.Generic.List<CallBackBeforeApplyWithDirty_Base>();
-			this.callback_afterapply = new System.Collections.Generic.List<CallBackAfterApply_Base>();
+			this.callback_before = new System.Collections.Generic.List<CallBackBeforeBuild_Base>();
+			this.callback_before_withdirty = new System.Collections.Generic.List<CallBackBeforeBuildWithDirty_Base>();
+			this.callback_after = new System.Collections.Generic.List<CallBackAfterBuild_Base>();
 
 			//rebult
 			UnityEngine.Font.textureRebuilt += this.Inner_CallBackTextureRebult;
@@ -69,16 +69,16 @@ namespace BlueBack.Font
 			//list
 			this.list = null;
 
-			//rebultflag
-			this.rebultflag = null;
+			//buildflag
+			this.buildflag = null;
 
 			//dirtyflag
 			this.dirtyflag = null;
 
 			//callback
-			this.callback_beforeapply = null;
-			this.callback_beforeapply_withdirty = null;
-			this.callback_afterapply = null;
+			this.callback_before = null;
+			this.callback_before_withdirty = null;
+			this.callback_after = null;
 
 			//rebult
 			UnityEngine.Font.textureRebuilt -= this.Inner_CallBackTextureRebult;
@@ -91,51 +91,51 @@ namespace BlueBack.Font
 			int ii_max = this.list.Length;
 			for(int ii=0;ii<ii_max;ii++){
 				if(this.list[ii].raw == a_font){
-					this.rebultflag[ii] = true;
+					this.buildflag[ii] = true;
 				}
 			}
 		}
 
 		/** コールバック。設定。
 		*/
-		public void SetCallBackBeforeApply(CallBackBeforeApply_Base a_callback)
+		public void SetCallBackBeforeBuild(CallBackBeforeBuild_Base a_callback)
 		{
-			this.callback_beforeapply.Add(a_callback);
+			this.callback_before.Add(a_callback);
 		}
 
 		/** コールバック。解除。
 		*/
-		public void UnSetCallBackBeforeApply(CallBackBeforeApply_Base a_callback)
+		public void UnSetCallBackBeforeBuild(CallBackBeforeBuild_Base a_callback)
 		{
-			this.callback_beforeapply.Remove(a_callback);
+			this.callback_before.Remove(a_callback);
 		}
 
 		/** コールバック。設定。
 		*/
-		public void SetCallBackBeforeApplyWithDirty(CallBackBeforeApplyWithDirty_Base a_callback)
+		public void SetCallBackBeforeBuildWithDirty(CallBackBeforeBuildWithDirty_Base a_callback)
 		{
-			this.callback_beforeapply_withdirty.Add(a_callback);
+			this.callback_before_withdirty.Add(a_callback);
 		}
 
 		/** コールバック。解除。
 		*/
-		public void UnSetCallBackBeforeApplyWithDirty(CallBackBeforeApplyWithDirty_Base a_callback)
+		public void UnSetCallBackBeforeBuildWithDirty(CallBackBeforeBuildWithDirty_Base a_callback)
 		{
-			this.callback_beforeapply_withdirty.Remove(a_callback);
+			this.callback_before_withdirty.Remove(a_callback);
 		}
 		
 		/** コールバック。設定。
 		*/
-		public void SetCallBackAfterApply(CallBackAfterApply_Base a_callback)
+		public void SetCallBackAfterBuild(CallBackAfterBuild_Base a_callback)
 		{
-			this.callback_afterapply.Add(a_callback);
+			this.callback_after.Add(a_callback);
 		}
 
 		/** コールバック。解除。
 		*/
-		public void UnSetCallBackAfterApply(CallBackAfterApply_Base a_callback)
+		public void UnSetCallBackAfterBuild(CallBackAfterBuild_Base a_callback)
 		{
-			this.callback_afterapply.Remove(a_callback);
+			this.callback_after.Remove(a_callback);
 		}
 
 		/** フォント。取得。
@@ -172,9 +172,9 @@ namespace BlueBack.Font
 			this.list[a_fontindex].dirtyflag = true;
 		}
 
-		/** StartApply
+		/** StartBuild
 		*/
-		public void StartApply()
+		public void StartBuild()
 		{
 			//直前コールバック呼び出し前にクリアする。
 			int ii_max = this.list.Length;
@@ -183,15 +183,15 @@ namespace BlueBack.Font
 			}
 		}
 
-		/** EndApply
+		/** EndBuild
 		*/
-		public void EndApply()
+		public void EndBuild()
 		{
-			//BeforeApply
+			//ビルド前。
 			{
-				int ii_max = this.callback_beforeapply.Count;
+				int ii_max = this.callback_before.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_beforeapply[ii].CallBackBeforeApply();
+					this.callback_before[ii].CallBackBeforeBuild();
 				}
 			}
 
@@ -203,35 +203,42 @@ namespace BlueBack.Font
 				}
 			}
 
-			//BeforeApplyWithDirty
+			//ビルド前。フラグ集計後。
 			{
-				int ii_max = this.callback_beforeapply_withdirty.Count;
+				int ii_max = this.callback_before_withdirty.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_beforeapply_withdirty[ii].CallBackBeforeApplyWithDirty(this.dirtyflag);
+					this.callback_before_withdirty[ii].CallBackBeforeBuildWithDirty(this.dirtyflag);
 				}
 			}
 
-			//Apply
+			//Build
 			{
 				int ii_max = this.list.Length;
 				for(int ii=0;ii<ii_max;ii++){
-					this.list[ii].Apply();
+					if(this.dirtyflag[ii] == true){
+						this.list[ii].Build();
+					}else{
+						#if(DEF_BLUEBACK_FONT_ASSERT)
+						DebugTool.Assert(this.list[ii].dirtyflag == false,"error");
+						#endif
+
+					}
 				}
 			}
 
-			//AfterApply
+			//CallBackAfterBuild
 			{
-				int ii_max = this.callback_afterapply.Count;
+				int ii_max = this.callback_after.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_afterapply[ii].CallBackAfterApply(this.rebultflag);
+					this.callback_after[ii].CallBackAfterBuild(this.buildflag);
 				}
 			}
 
-			//再構築フラグ。リセット。
+			//フラグリセット。
 			{
-				int ii_max = this.rebultflag.Length;
+				int ii_max = this.buildflag.Length;
 				for(int ii=0;ii<ii_max;ii++){
-					this.rebultflag[ii] = false;
+					this.buildflag[ii] = false;
 				}
 			}
 		}

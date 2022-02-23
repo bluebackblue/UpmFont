@@ -91,9 +91,9 @@ namespace BlueBack.Font
 			}
 		}
 
-		/** 構築。
+		/** ビルド。
 		*/
-		public void Apply()
+		public void Build()
 		{
 			if(this.dirtyflag == true){
 				this.dirtyflag = false;
