@@ -17,7 +17,7 @@ namespace BlueBack.Font
 	{
 		/** [BlueBack.Font.CallBackAfterApply_Base]構築直後。
 
-			a_rebultflag		: フォントごとの再構築フラグ。
+			a_rebultflag		: フォントごとの再構築完了フラグ。
 
 		*/
 		void CallBackAfterApply(bool[] a_rebultflag);

@@ -23,9 +23,14 @@ namespace BlueBack.Font
 		*/
 		private bool[] rebultflag;
 
+		/** dirtyflag
+		*/
+		private bool[] dirtyflag;
+
 		/** callback
 		*/
 		private System.Collections.Generic.List<CallBackBeforeApply_Base> callback_beforeapply;
+		private System.Collections.Generic.List<CallBackBeforeApplyWithDirty_Base> callback_beforeapply_withdirty;
 		private System.Collections.Generic.List<CallBackAfterApply_Base> callback_afterapply;
 
 		/** constructor
@@ -38,14 +43,19 @@ namespace BlueBack.Font
 			//rebultflag
 			this.rebultflag = new bool[a_initparam.font.Length]; 
 
+			//dirtyflag
+			this.dirtyflag = new bool[a_initparam.font.Length]; 
+
 			int ii_max = a_initparam.font.Length;
 			for(int ii=0;ii<ii_max;ii++){
 				this.list[ii] = new Item(in a_initparam,ii);
 				this.rebultflag[ii] = false;
+				this.dirtyflag[ii] = false;
 			}
 
 			//callback
 			this.callback_beforeapply = new System.Collections.Generic.List<CallBackBeforeApply_Base>();
+			this.callback_beforeapply_withdirty = new System.Collections.Generic.List<CallBackBeforeApplyWithDirty_Base>();
 			this.callback_afterapply = new System.Collections.Generic.List<CallBackAfterApply_Base>();
 
 			//rebult
@@ -62,8 +72,12 @@ namespace BlueBack.Font
 			//rebultflag
 			this.rebultflag = null;
 
+			//dirtyflag
+			this.dirtyflag = null;
+
 			//callback
 			this.callback_beforeapply = null;
+			this.callback_beforeapply_withdirty = null;
 			this.callback_afterapply = null;
 
 			//rebult
@@ -94,6 +108,20 @@ namespace BlueBack.Font
 		public void UnSetCallBackBeforeApply(CallBackBeforeApply_Base a_callback)
 		{
 			this.callback_beforeapply.Remove(a_callback);
+		}
+
+		/** コールバック。設定。
+		*/
+		public void SetCallBackBeforeApplyWithDirty(CallBackBeforeApplyWithDirty_Base a_callback)
+		{
+			this.callback_beforeapply_withdirty.Add(a_callback);
+		}
+
+		/** コールバック。解除。
+		*/
+		public void UnSetCallBackBeforeApplyWithDirty(CallBackBeforeApplyWithDirty_Base a_callback)
+		{
+			this.callback_beforeapply_withdirty.Remove(a_callback);
 		}
 		
 		/** コールバック。設定。
@@ -137,6 +165,13 @@ namespace BlueBack.Font
 			this.list[a_fontindex].CancelString();
 		}
 
+		/** SetDirty
+		*/
+		public void SetDirty(int a_fontindex)
+		{
+			this.list[a_fontindex].dirtyflag = true;
+		}
+
 		/** StartApply
 		*/
 		public void StartApply()
@@ -152,7 +187,7 @@ namespace BlueBack.Font
 		*/
 		public void EndApply()
 		{
-			//直前コールバック。
+			//BeforeApply
 			{
 				int ii_max = this.callback_beforeapply.Count;
 				for(int ii=0;ii<ii_max;ii++){
@@ -160,7 +195,23 @@ namespace BlueBack.Font
 				}
 			}
 
-			//構築。
+			//dirtyflag
+			{
+				int ii_max = this.list.Length;
+				for(int ii=0;ii<ii_max;ii++){
+					this.dirtyflag[ii] = this.list[ii].dirtyflag;
+				}
+			}
+
+			//BeforeApplyWithDirty
+			{
+				int ii_max = this.callback_beforeapply_withdirty.Count;
+				for(int ii=0;ii<ii_max;ii++){
+					this.callback_beforeapply_withdirty[ii].CallBackBeforeApplyWithDirty(this.dirtyflag);
+				}
+			}
+
+			//Apply
 			{
 				int ii_max = this.list.Length;
 				for(int ii=0;ii<ii_max;ii++){
@@ -168,7 +219,7 @@ namespace BlueBack.Font
 				}
 			}
 
-			//直後コールバック。
+			//AfterApply
 			{
 				int ii_max = this.callback_afterapply.Count;
 				for(int ii=0;ii<ii_max;ii++){

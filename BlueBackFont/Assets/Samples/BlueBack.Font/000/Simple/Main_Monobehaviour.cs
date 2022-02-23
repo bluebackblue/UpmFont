@@ -6,7 +6,7 @@ namespace BlueBack.Font.Samples.Simple
 {
 	/** Main_Monobehaviour
 	*/
-	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeApply_Base , BlueBack.Font.CallBackAfterApply_Base
+	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeApplyWithDirty_Base , BlueBack.Font.CallBackAfterApply_Base
 	{
 		/** font
 		*/
@@ -95,7 +95,7 @@ namespace BlueBack.Font.Samples.Simple
 			this.spriteindex_create = false;
 
 			//コールバック登録。
-			this.font.SetCallBackBeforeApply(this);
+			this.font.SetCallBackBeforeApplyWithDirty(this);
 			this.font.SetCallBackAfterApply(this);
 
 			//文字列。
@@ -105,17 +105,25 @@ namespace BlueBack.Font.Samples.Simple
 
 			//構築。
 			this.font.StartApply();
+			this.font.SetDirty(FONTINDEX);
 			{
 				//文字列追加。
 			}
 			this.font.EndApply();
 		}
 
-		/** [BlueBack.Font.CallBackPreApply_Base]構築直前。
+		/** [BlueBack.Font.CallBackBeforeApplyWithDirty_Base]構築直前。
+
+			a_dirtyflag				: フラグの立っていないフォントは再構築されない。
+
+			すべてのCallBackBeforeApplyが呼び出された後に呼び出される。
+
 		*/
-		public void CallBackBeforeApply()
+		public void CallBackBeforeApplyWithDirty(bool[] a_dirtyflag)
 		{
-			this.font.AddString(FONTINDEX,this.stringkey);
+			if(a_dirtyflag[FONTINDEX] == true){
+				this.font.AddString(FONTINDEX,this.stringkey);
+			}
 		}
 
 		/** [BlueBack.Font.CallBackAfterApply_Base]構築直後。
@@ -165,7 +173,7 @@ namespace BlueBack.Font.Samples.Simple
 		private void OnDestroy()
 		{
 			if(this.font != null){
-				this.font.UnSetCallBackBeforeApply(this);
+				this.font.UnSetCallBackBeforeApplyWithDirty(this);
 				this.font.UnSetCallBackAfterApply(this);
 			}
 

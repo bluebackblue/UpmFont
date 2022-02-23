@@ -28,6 +28,10 @@ namespace BlueBack.Font
 		public System.Collections.Generic.Dictionary<Key_SizeStyle,StringBufferItem> addrequest_stringbuffer;
 		public int addrequest_capacity;
 
+		/** dirtyflag
+		*/
+		public bool dirtyflag;
+
 		/** constructor
 		*/
 		public Item(in InitParam a_initparam,int a_index)
@@ -41,6 +45,9 @@ namespace BlueBack.Font
 			//addrequest_stringbuffer
 			this.addrequest_stringbuffer = new System.Collections.Generic.Dictionary<Key_SizeStyle,StringBufferItem>();
 			this.addrequest_capacity = a_initparam.stringbuffer_capacity;
+
+			//dirtyflag
+			this.dirtyflag = false;
 		}
 
 		/** 使用文字列の追加。
@@ -70,6 +77,7 @@ namespace BlueBack.Font
 					DebugTool.Log(string.Format("AddString : Append : {0} : {1} : {2}",t_item.fontsize,t_item.fontstyle,t_item.code));
 					#endif
 					t_stringbufferitem.stringbuffer.Append(t_key.code);
+					this.dirtyflag = true;
 				}
 			}
 		}
@@ -78,6 +86,7 @@ namespace BlueBack.Font
 		*/
 		public void CancelString()
 		{
+			this.dirtyflag = false;
 			foreach(System.Collections.Generic.KeyValuePair<Key_SizeStyle,StringBufferItem> t_pair in this.addrequest_stringbuffer){
 				t_pair.Value.stringbuffer.Clear();
 			}
@@ -87,16 +96,18 @@ namespace BlueBack.Font
 		*/
 		public void Apply()
 		{
-			//RequestCharactersInTexture
-			foreach(System.Collections.Generic.KeyValuePair<Key_SizeStyle,StringBufferItem> t_pair in this.addrequest_stringbuffer){
-				if(t_pair.Value.stringbuffer.Length > 0){
-					string t_string = t_pair.Value.stringbuffer.ToString();
-					this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
-					t_pair.Value.stringbuffer.Clear();
+			if(this.dirtyflag == true){
+				this.dirtyflag = false;
+				foreach(System.Collections.Generic.KeyValuePair<Key_SizeStyle,StringBufferItem> t_pair in this.addrequest_stringbuffer){
+					if(t_pair.Value.stringbuffer.Length > 0){
+						string t_string = t_pair.Value.stringbuffer.ToString();
+						this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
+						t_pair.Value.stringbuffer.Clear();
 
-					#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-					DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.texture.width,this.texture.height,t_string));
-					#endif
+						#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
+						DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.texture.width,this.texture.height,t_string));
+						#endif
+					}
 				}
 			}
 		}
