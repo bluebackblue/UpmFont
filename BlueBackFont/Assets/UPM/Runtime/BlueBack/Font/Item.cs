@@ -15,9 +15,13 @@ namespace BlueBack.Font
 	*/
 	public class Item : CallBackReBuilt_Base
 	{
-		/** font
+		/** raw
 		*/
-		public UnityEngine.Font font;
+		public UnityEngine.Font raw;
+
+		/** index
+		*/
+		public int index;
 
 		/** texture
 		*/
@@ -41,11 +45,11 @@ namespace BlueBack.Font
 		*/
 		public Item(in InitParam a_initparam,int a_index)
 		{
-			//font
-			this.font = a_initparam.font[a_index];
+			//raw
+			this.raw = a_initparam.font[a_index];
 
 			//texture
-			this.texture = this.font.material.mainTexture;
+			this.texture = this.raw.material.mainTexture;
 
 			//texture_hashset
 			this.texture_hashset = new System.Collections.Generic.HashSet<Key_CodeSizeStyle>();
@@ -123,14 +127,14 @@ namespace BlueBack.Font
 			{
 				int ii_max = this.callback_beforeapply.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_beforeapply[ii].CallBackBeforeApply(ii);
+					this.callback_beforeapply[ii].CallBackBeforeApply(this.index);
 				}
 			}
 
 			foreach(System.Collections.Generic.KeyValuePair<Key_SizeStyle,StringBufferItem> t_pair in this.addrequest_stringbuffer){
 				if(t_pair.Value.stringbuffer.Length > 0){
 					string t_string = t_pair.Value.stringbuffer.ToString();
-					this.font.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
+					this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
 					t_pair.Value.stringbuffer.Clear();
 
 					#if(DEF_BLUEBACK_FONT_LOG) && DEF_BLUEBACK_FONT_FULLDEBUG
@@ -143,7 +147,7 @@ namespace BlueBack.Font
 			{
 				int ii_max = this.callback_afterapply.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_afterapply[ii].CallBackAfterApply(ii);
+					this.callback_afterapply[ii].CallBackAfterApply(this.index);
 				}
 			}
 		}

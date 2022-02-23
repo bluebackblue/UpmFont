@@ -43,7 +43,7 @@ namespace BlueBack.Font
 		{
 			int ii_max = this.list.Length;
 			for(int ii=0;ii<ii_max;ii++){
-				if(this.list[ii].font == a_font){
+				if(this.list[ii].raw == a_font){
 					this.list[ii].CallBackReBuilt();
 				}
 			}
