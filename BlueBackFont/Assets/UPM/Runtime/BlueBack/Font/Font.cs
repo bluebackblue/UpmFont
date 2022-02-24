@@ -96,6 +96,13 @@ namespace BlueBack.Font
 			}
 		}
 
+		/** SetBuildRequest
+		*/
+		public void SetBuildRequest(int a_fontindex,bool a_flag)
+		{
+			this.buildrequest[a_fontindex] = a_flag;
+		}
+
 		/** コールバック。設定。
 		*/
 		public void SetCallBackBeforeBuild(CallBackBeforeBuild_Base a_callback)
