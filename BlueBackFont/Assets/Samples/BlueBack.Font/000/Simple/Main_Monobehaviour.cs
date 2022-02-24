@@ -6,7 +6,7 @@ namespace BlueBack.Font.Samples.Simple
 {
 	/** Main_Monobehaviour
 	*/
-	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeBuildWithDirty_Base , BlueBack.Font.CallBackAfterBuild_Base
+	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeBuildWithBuildRequest_Base , BlueBack.Font.CallBackAfterBuild_Base
 	{
 		/** font
 		*/
@@ -15,6 +15,10 @@ namespace BlueBack.Font.Samples.Simple
 		/** gl
 		*/
 		public BlueBack.Gl.Gl gl;
+
+		/** MATERIALINDEX
+		*/
+		public const int MATERIALINDEX = 0;
 
 		/** FONTSIZE
 		*/
@@ -94,7 +98,7 @@ namespace BlueBack.Font.Samples.Simple
 				this.gl.texturelist.list[TEXTUREINDEX_2] = this.font.GetFont(FONTINDEX_2).material.mainTexture;
 					
 				//materialexecutelist
-				this.gl.materialexecutelist.list[0] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("Simple/Font"));
+				this.gl.materialexecutelist.list[MATERIALINDEX] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("Simple/Font"));
 			}
 
 			//uitext
@@ -108,8 +112,8 @@ namespace BlueBack.Font.Samples.Simple
 			this.spriteindex1_y = VIRTUAL_SCREEN_H / 2;
 			this.spriteindex2_x = VIRTUAL_SCREEN_W / 2 + 100;
 			this.spriteindex2_y = VIRTUAL_SCREEN_H / 2;
-			this.spriteindex_1 = this.gl.spritelist[0].CreateSprite(false,0,0);
-			this.spriteindex_2 = this.gl.spritelist[0].CreateSprite(false,0,0);
+			this.spriteindex_1 = this.gl.spritelist[0].CreateSprite(false,MATERIALINDEX,TEXTUREINDEX_1);
+			this.spriteindex_2 = this.gl.spritelist[0].CreateSprite(false,MATERIALINDEX,TEXTUREINDEX_2);
 
 			//文字。
 			this.charkey = new BlueBack.Font.CharKey[]{
@@ -128,25 +132,19 @@ namespace BlueBack.Font.Samples.Simple
 			{
 				ref BlueBack.Gl.SpriteBuffer t_spritebuffer = ref this.spriteindex_1.GetSpriteBuffer();
 				t_spritebuffer.visible = true;
-				t_spritebuffer.material_index = 0;
-				t_spritebuffer.texture_index = TEXTUREINDEX_1;
 				t_spritebuffer.color = new UnityEngine.Color(1.0f,1.0f,1.0f,1.0f);
-
 				Inner_CalcTexcordVertex(FONTINDEX_1,ref t_spritebuffer,this.spriteindex1_x,this.spriteindex1_y,in this.gl.screenparam);
 			}
 
 			{
 				ref BlueBack.Gl.SpriteBuffer t_spritebuffer = ref this.spriteindex_2.GetSpriteBuffer();
 				t_spritebuffer.visible = true;
-				t_spritebuffer.material_index = 0;
-				t_spritebuffer.texture_index = TEXTUREINDEX_2;
 				t_spritebuffer.color = new UnityEngine.Color(1.0f,1.0f,1.0f,1.0f);
-
 				Inner_CalcTexcordVertex(FONTINDEX_2,ref t_spritebuffer,this.spriteindex2_x,this.spriteindex2_y,in this.gl.screenparam);
 			}
 
 			//コールバック登録。
-			this.font.SetCallBackBeforeBuildWithDirty(this);
+			this.font.SetCallBackBeforeBuildWithBuildRequest(this);
 			this.font.SetCallBackAfterBuild(this);
 		}
 
@@ -177,33 +175,38 @@ namespace BlueBack.Font.Samples.Simple
 			}
 		}
 
-		/** [BlueBack.Font.CallBackBeforeBuildWithDirty_Base]ビルド直前。
+		/** [BlueBack.Font.CallBackBeforeBuildWithBuildRequest_Base]ビルド直前。
 
-			フラグの立っていないフォントはビルドされない。
 			すべてのCallBackBeforeBuildが呼び出された後に呼び出される。
 
+			a_buildrequest == true : ビルドリクエストあり。
+
 		*/
-		public void CallBackBeforeBuildWithDirty(bool[] a_dirtyflag)
+		public void CallBackBeforeBuildWithBuildRequest(bool[] a_buildrequest)
 		{
-			if(a_dirtyflag[FONTINDEX_1] == true){
+			//ビルド時に含める文字列を追加する。
+
+			if(a_buildrequest[FONTINDEX_1] == true){
 				this.font.AddString(FONTINDEX_1,this.charkey);
 			}
-			if(a_dirtyflag[FONTINDEX_2] == true){
+			if(a_buildrequest[FONTINDEX_2] == true){
 				this.font.AddString(FONTINDEX_2,this.charkey);
 			}
 		}
 
 		/** [BlueBack.Font.CallBackAfterBuild_Base]ビルド直後。
 
-			a_rebultflag : ビルド完了フラグ。
+			a_buildrequest == true		: ビルドリクエストあり。
+			a_changetexture == true		: フォントテクスチャーが再構築された。
 
 		*/
-		public void CallBackAfterBuild(bool[] a_buildflag)
+		public void CallBackAfterBuild(bool[] a_buildrequest,bool[] a_changetexture)
 		{
-			if(a_buildflag[FONTINDEX_1] == true){
+			//vertex.uvを再計算する必要がある。
+			if(a_changetexture[FONTINDEX_1] == true){
 				Inner_CalcTexcordVertex(FONTINDEX_1,ref this.spriteindex_1.GetSpriteBuffer(),this.spriteindex1_x,this.spriteindex1_y,in this.gl.screenparam);
 			}
-			if(a_buildflag[FONTINDEX_2] == true){
+			if(a_changetexture[FONTINDEX_2] == true){
 				Inner_CalcTexcordVertex(FONTINDEX_2,ref this.spriteindex_2.GetSpriteBuffer(),this.spriteindex2_x,this.spriteindex2_y,in this.gl.screenparam);
 			}
 		}
@@ -213,7 +216,7 @@ namespace BlueBack.Font.Samples.Simple
 		private void OnDestroy()
 		{
 			if(this.font != null){
-				this.font.UnSetCallBackBeforeBuildWithDirty(this);
+				this.font.UnSetCallBackBeforeBuildWithBuildRequest(this);
 				this.font.UnSetCallBackAfterBuild(this);
 			}
 

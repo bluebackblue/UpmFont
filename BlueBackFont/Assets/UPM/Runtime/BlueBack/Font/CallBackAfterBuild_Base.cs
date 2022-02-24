@@ -17,10 +17,11 @@ namespace BlueBack.Font
 	{
 		/** [BlueBack.Font.CallBackAfterBuild_Base]ビルド直後。
 
-			a_rebultflag : ビルド完了フラグ。
+			a_buildrequest == true		: ビルドリクエストあり。
+			a_changetexture == true		: フォントテクスチャーが再構築された。
 
 		*/
-		void CallBackAfterBuild(bool[] a_buildflag);
+		void CallBackAfterBuild(bool[] a_buildrequest,bool[] a_changetexture);
 	}
 }
 

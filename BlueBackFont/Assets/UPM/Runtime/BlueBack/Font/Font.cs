@@ -19,18 +19,18 @@ namespace BlueBack.Font
 		*/
 		private Item[] list;
 
-		/** buildflag
+		/** changetexture
 		*/
-		private bool[] buildflag;
+		private bool[] changetexture;
 
-		/** dirtyflag
+		/** buildrequest
 		*/
-		private bool[] dirtyflag;
+		private bool[] buildrequest;
 
 		/** callback
 		*/
 		private System.Collections.Generic.List<CallBackBeforeBuild_Base> callback_before;
-		private System.Collections.Generic.List<CallBackBeforeBuildWithDirty_Base> callback_before_withdirty;
+		private System.Collections.Generic.List<CallBackBeforeBuildWithBuildRequest_Base> callback_before_with_buildrequest;
 		private System.Collections.Generic.List<CallBackAfterBuild_Base> callback_after;
 
 		/** constructor
@@ -40,22 +40,22 @@ namespace BlueBack.Font
 			//list
 			this.list = new Item[a_initparam.font.Length];
 
-			//buildflag
-			this.buildflag = new bool[a_initparam.font.Length]; 
+			//changetexture
+			this.changetexture = new bool[a_initparam.font.Length]; 
 
-			//dirtyflag
-			this.dirtyflag = new bool[a_initparam.font.Length]; 
+			//buildrequest
+			this.buildrequest = new bool[a_initparam.font.Length]; 
 
 			int ii_max = a_initparam.font.Length;
 			for(int ii=0;ii<ii_max;ii++){
 				this.list[ii] = new Item(in a_initparam,ii);
-				this.buildflag[ii] = false;
-				this.dirtyflag[ii] = false;
+				this.changetexture[ii] = false;
+				this.buildrequest[ii] = false;
 			}
 
 			//callback
 			this.callback_before = new System.Collections.Generic.List<CallBackBeforeBuild_Base>();
-			this.callback_before_withdirty = new System.Collections.Generic.List<CallBackBeforeBuildWithDirty_Base>();
+			this.callback_before_with_buildrequest = new System.Collections.Generic.List<CallBackBeforeBuildWithBuildRequest_Base>();
 			this.callback_after = new System.Collections.Generic.List<CallBackAfterBuild_Base>();
 
 			//rebult
@@ -69,15 +69,15 @@ namespace BlueBack.Font
 			//list
 			this.list = null;
 
-			//buildflag
-			this.buildflag = null;
+			//changetexture
+			this.changetexture = null;
 
-			//dirtyflag
-			this.dirtyflag = null;
+			//buildrequest
+			this.buildrequest = null;
 
 			//callback
 			this.callback_before = null;
-			this.callback_before_withdirty = null;
+			this.callback_before_with_buildrequest = null;
 			this.callback_after = null;
 
 			//rebult
@@ -91,7 +91,7 @@ namespace BlueBack.Font
 			int ii_max = this.list.Length;
 			for(int ii=0;ii<ii_max;ii++){
 				if(this.list[ii].raw == a_font){
-					this.buildflag[ii] = true;
+					this.changetexture[ii] = true;
 				}
 			}
 		}
@@ -112,16 +112,16 @@ namespace BlueBack.Font
 
 		/** コールバック。設定。
 		*/
-		public void SetCallBackBeforeBuildWithDirty(CallBackBeforeBuildWithDirty_Base a_callback)
+		public void SetCallBackBeforeBuildWithBuildRequest(CallBackBeforeBuildWithBuildRequest_Base a_callback)
 		{
-			this.callback_before_withdirty.Add(a_callback);
+			this.callback_before_with_buildrequest.Add(a_callback);
 		}
 
 		/** コールバック。解除。
 		*/
-		public void UnSetCallBackBeforeBuildWithDirty(CallBackBeforeBuildWithDirty_Base a_callback)
+		public void UnSetCallBackBeforeBuildWithBuildRequest(CallBackBeforeBuildWithBuildRequest_Base a_callback)
 		{
-			this.callback_before_withdirty.Remove(a_callback);
+			this.callback_before_with_buildrequest.Remove(a_callback);
 		}
 		
 		/** コールバック。設定。
@@ -155,7 +155,9 @@ namespace BlueBack.Font
 		*/
 		public void AddString(int a_fontindex,CharKey[] a_string)
 		{
-			this.list[a_fontindex].AddString(a_string);
+			if(this.list[a_fontindex].AddString(a_string) == true){
+				this.buildrequest[a_fontindex] = true;
+			}
 		}
 
 		/** CancelString
@@ -163,13 +165,7 @@ namespace BlueBack.Font
 		public void CancelString(int a_fontindex)
 		{
 			this.list[a_fontindex].CancelString();
-		}
-
-		/** SetDirty
-		*/
-		public void SetDirty(int a_fontindex)
-		{
-			this.list[a_fontindex].dirtyflag = true;
+			this.buildrequest[a_fontindex] = false;
 		}
 
 		/** StartBuild
@@ -177,9 +173,19 @@ namespace BlueBack.Font
 		public void StartBuild()
 		{
 			//直前コールバック呼び出し前にクリアする。
-			int ii_max = this.list.Length;
-			for(int ii=0;ii<ii_max;ii++){
-				this.list[ii].texture_hashset.Clear();
+			{
+				int ii_max = this.list.Length;
+				for(int ii=0;ii<ii_max;ii++){
+					this.list[ii].texture_hashset.Clear();
+				}
+			}
+
+			//フラグリセット。
+			{
+				int ii_max = this.changetexture.Length;
+				for(int ii=0;ii<ii_max;ii++){
+					this.changetexture[ii] = false;
+				}
 			}
 		}
 
@@ -187,7 +193,7 @@ namespace BlueBack.Font
 		*/
 		public void EndBuild()
 		{
-			//ビルド前。
+			//ビルド直前。
 			{
 				int ii_max = this.callback_before.Count;
 				for(int ii=0;ii<ii_max;ii++){
@@ -195,19 +201,11 @@ namespace BlueBack.Font
 				}
 			}
 
-			//dirtyflag
+			//ビルド直前。
 			{
-				int ii_max = this.list.Length;
+				int ii_max = this.callback_before_with_buildrequest.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.dirtyflag[ii] = this.list[ii].dirtyflag;
-				}
-			}
-
-			//ビルド前。フラグ集計後。
-			{
-				int ii_max = this.callback_before_withdirty.Count;
-				for(int ii=0;ii<ii_max;ii++){
-					this.callback_before_withdirty[ii].CallBackBeforeBuildWithDirty(this.dirtyflag);
+					this.callback_before_with_buildrequest[ii].CallBackBeforeBuildWithBuildRequest(this.buildrequest);
 				}
 			}
 
@@ -215,30 +213,17 @@ namespace BlueBack.Font
 			{
 				int ii_max = this.list.Length;
 				for(int ii=0;ii<ii_max;ii++){
-					if(this.dirtyflag[ii] == true){
+					if(this.buildrequest[ii] == true){
 						this.list[ii].Build();
-					}else{
-						#if(DEF_BLUEBACK_FONT_ASSERT)
-						DebugTool.Assert(this.list[ii].dirtyflag == false,"error");
-						#endif
-
 					}
 				}
 			}
 
-			//CallBackAfterBuild
+			//ビルド直後。
 			{
 				int ii_max = this.callback_after.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_after[ii].CallBackAfterBuild(this.buildflag);
-				}
-			}
-
-			//フラグリセット。
-			{
-				int ii_max = this.buildflag.Length;
-				for(int ii=0;ii<ii_max;ii++){
-					this.buildflag[ii] = false;
+					this.callback_after[ii].CallBackAfterBuild(this.buildrequest,this.changetexture);
 				}
 			}
 		}

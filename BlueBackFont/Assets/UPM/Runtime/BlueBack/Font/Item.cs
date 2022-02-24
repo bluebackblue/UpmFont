@@ -28,10 +28,6 @@ namespace BlueBack.Font
 		public System.Collections.Generic.Dictionary<StringBufferKey,System.Text.StringBuilder> addrequest_stringbuffer;
 		public int addrequest_capacity;
 
-		/** dirtyflag
-		*/
-		public bool dirtyflag;
-
 		/** constructor
 		*/
 		public Item(in InitParam a_initparam,int a_index)
@@ -45,15 +41,17 @@ namespace BlueBack.Font
 			//addrequest_stringbuffer
 			this.addrequest_stringbuffer = new System.Collections.Generic.Dictionary<StringBufferKey,System.Text.StringBuilder>();
 			this.addrequest_capacity = a_initparam.stringbuffer_capacity;
-
-			//dirtyflag
-			this.dirtyflag = false;
 		}
 
 		/** 使用文字列の追加。
+
+			return == true : 追加あり。
+
 		*/
-		public void AddString(CharKey[] a_string)
+		public bool AddString(CharKey[] a_string)
 		{
+			bool t_change = false;
+
 			int ii_max = a_string.Length;
 			for(int ii=0;ii<ii_max;ii++){
 				CharKey t_key = a_string[ii];
@@ -76,16 +74,17 @@ namespace BlueBack.Font
 					DebugTool.Log(string.Format("AddString : Append : {0} : {1} : {2}",t_item.fontsize,t_item.fontstyle,t_item.code));
 					#endif
 					t_stringbuffer.Append(t_key.code);
-					this.dirtyflag = true;
+					t_change = true;
 				}
 			}
+
+			return t_change;
 		}
 
 		/** 文字列追加をキャンセル。
 		*/
 		public void CancelString()
 		{
-			this.dirtyflag = false;
 			foreach(System.Collections.Generic.KeyValuePair<StringBufferKey,System.Text.StringBuilder> t_pair in this.addrequest_stringbuffer){
 				t_pair.Value.Clear();
 			}
@@ -95,18 +94,15 @@ namespace BlueBack.Font
 		*/
 		public void Build()
 		{
-			if(this.dirtyflag == true){
-				this.dirtyflag = false;
-				foreach(System.Collections.Generic.KeyValuePair<StringBufferKey,System.Text.StringBuilder> t_pair in this.addrequest_stringbuffer){
-					if(t_pair.Value.Length > 0){
-						string t_string = t_pair.Value.ToString();
-						this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
-						t_pair.Value.Clear();
+			foreach(System.Collections.Generic.KeyValuePair<StringBufferKey,System.Text.StringBuilder> t_pair in this.addrequest_stringbuffer){
+				if(t_pair.Value.Length > 0){
+					string t_string = t_pair.Value.ToString();
+					this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
+					t_pair.Value.Clear();
 
-						#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-						DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.texture.width,this.texture.height,t_string));
-						#endif
-					}
+					#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
+					DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.texture.width,this.texture.height,t_string));
+					#endif
 				}
 			}
 		}
