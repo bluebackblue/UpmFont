@@ -3,7 +3,7 @@
 /**
 	Copyright (c) blueback
 	Released under the MIT License
-	@brief フォント。
+	@brief フォント。コールバック。
 */
 
 
@@ -15,7 +15,7 @@ namespace BlueBack.Font
 	*/
 	public interface CallBackBeforeBuild_Base
 	{
-		/** [BlueBack.Font.CallBackBeforeBuild_Base]ビルド直前。
+		/** [BlueBack.Font.CallBackBeforeBuild_Base]ビルド直前コールバック。
 		*/
 		void CallBackBeforeBuild();
 	}

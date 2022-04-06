@@ -13,7 +13,7 @@ namespace BlueBack.Font
 {
 	/** Item
 	*/
-	public class Item
+	public class Item : System.IDisposable
 	{
 		/** raw
 		*/
@@ -35,12 +35,42 @@ namespace BlueBack.Font
 			//raw
 			this.raw = a_initparam.font[a_index];
 
-			//texture_hashset
+			//texture
 			this.texture_hashset = new System.Collections.Generic.HashSet<CharKey>();
 
-			//addrequest_stringbuffer
+			//addrequest
 			this.addrequest_stringbuffer = new System.Collections.Generic.Dictionary<StringBufferKey,System.Text.StringBuilder>();
 			this.addrequest_capacity = a_initparam.stringbuffer_capacity;
+		}
+
+		/** [IDisposable]Dispose。
+		*/
+		public void Dispose()
+		{
+			//raw
+			this.raw = null;
+
+			//texture
+			this.texture_hashset = null;
+
+			//addrequest
+			this.addrequest_stringbuffer = null;
+		}
+
+		/** クリア。
+		*/
+		public void ClearHashSet()
+		{
+			this.texture_hashset.Clear();
+		}
+
+		/** クリア。
+		*/
+		public void ClearStringBuilder()
+		{
+			foreach(System.Collections.Generic.KeyValuePair<StringBufferKey,System.Text.StringBuilder> t_pair in this.addrequest_stringbuffer){
+				t_pair.Value.Clear();
+			}
 		}
 
 		/** 使用文字列の追加。
@@ -64,7 +94,7 @@ namespace BlueBack.Font
 						#if(DEF_BLUEBACK_FONT_LOG)
 						DebugTool.Log(string.Format("AddString : NewFontSize : {0} : {1}",t_key_stringbuffer.fontsize,t_key_stringbuffer.fontstyle));
 						#endif
-						t_stringbuffer = new System.Text.StringBuilder(1024);
+						t_stringbuffer = new System.Text.StringBuilder(this.addrequest_capacity);
 						this.addrequest_stringbuffer.Add(t_key_stringbuffer,t_stringbuffer);
 					}
 				}
@@ -79,15 +109,6 @@ namespace BlueBack.Font
 			}
 
 			return t_change;
-		}
-
-		/** 文字列追加をキャンセル。
-		*/
-		public void CancelString()
-		{
-			foreach(System.Collections.Generic.KeyValuePair<StringBufferKey,System.Text.StringBuilder> t_pair in this.addrequest_stringbuffer){
-				t_pair.Value.Clear();
-			}
 		}
 
 		/** ビルド。

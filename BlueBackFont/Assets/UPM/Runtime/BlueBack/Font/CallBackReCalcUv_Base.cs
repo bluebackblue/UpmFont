@@ -3,7 +3,7 @@
 /**
 	Copyright (c) blueback
 	Released under the MIT License
-	@brief フォント。
+	@brief フォント。コールバック。
 */
 
 
@@ -11,17 +11,17 @@
 */
 namespace BlueBack.Font
 {
-	/** CallBackAfterBuild_Base
+	/** CallBackReCalcUv_Base
 	*/
-	public interface CallBackAfterBuild_Base
+	public interface CallBackReCalcUv_Base
 	{
-		/** [BlueBack.Font.CallBackAfterBuild_Base]ビルド直後。
+		/** [BlueBack.Font.CallBackReCalcUv_Base]ＵＶ再計算コールバック。
 
 			a_buildrequest == true		: ビルドリクエストあり。
 			a_changetexture == true		: フォントテクスチャーが再構築された。
 
 		*/
-		void CallBackAfterBuild(bool[] a_buildrequest,bool[] a_changetexture);
+		void CallBackReCalcUv(bool[] a_buildrequest,bool[] a_changetexture);
 	}
 }
 

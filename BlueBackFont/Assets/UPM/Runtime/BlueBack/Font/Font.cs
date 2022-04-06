@@ -15,184 +15,52 @@ namespace BlueBack.Font
 	*/
 	public sealed class Font : System.IDisposable
 	{
-		/** list
+		/** fontlist
 		*/
-		private Item[] list;
+		public FontList fontlist;
 
-		/** changetexture
+		/** callbacklist
 		*/
-		private bool[] changetexture;
-
-		/** buildrequest
-		*/
-		private bool[] buildrequest;
-
-		/** callback
-		*/
-		private System.Collections.Generic.List<CallBackBeforeBuild_Base> callback_before;
-		private System.Collections.Generic.List<CallBackBeforeBuildWithBuildRequest_Base> callback_before_with_buildrequest;
-		private System.Collections.Generic.List<CallBackAfterBuild_Base> callback_after;
+		public CallBackList callbacklist;
 
 		/** constructor
 		*/
 		public Font(in InitParam a_initparam)
 		{
-			//list
-			this.list = new Item[a_initparam.font.Length];
+			//fontlist
+			this.fontlist = new FontList(in a_initparam);
 
-			//changetexture
-			this.changetexture = new bool[a_initparam.font.Length]; 
+			//callbacklist
+			this.callbacklist = new CallBackList();
 
-			//buildrequest
-			this.buildrequest = new bool[a_initparam.font.Length]; 
-
-			int ii_max = a_initparam.font.Length;
-			for(int ii=0;ii<ii_max;ii++){
-				this.list[ii] = new Item(in a_initparam,ii);
-				this.changetexture[ii] = false;
-				this.buildrequest[ii] = false;
-			}
-
-			//callback
-			this.callback_before = new System.Collections.Generic.List<CallBackBeforeBuild_Base>();
-			this.callback_before_with_buildrequest = new System.Collections.Generic.List<CallBackBeforeBuildWithBuildRequest_Base>();
-			this.callback_after = new System.Collections.Generic.List<CallBackAfterBuild_Base>();
-
-			//rebult
-			UnityEngine.Font.textureRebuilt += this.Inner_CallBackTextureRebult;
+			//textureRebuilt
+			UnityEngine.Font.textureRebuilt += this.fontlist.CallBackChangeTexture;
 		}
 
 		/** [IDisposable]Dispose。
 		*/
 		public void Dispose()
 		{
-			//list
-			this.list = null;
+			//textureRebuilt
+			UnityEngine.Font.textureRebuilt -= this.fontlist.CallBackChangeTexture;
 
-			//changetexture
-			this.changetexture = null;
+			//fontlist
+			this.fontlist.Dispose();
+			this.fontlist = null;
 
-			//buildrequest
-			this.buildrequest = null;
-
-			//callback
-			this.callback_before = null;
-			this.callback_before_with_buildrequest = null;
-			this.callback_after = null;
-
-			//rebult
-			UnityEngine.Font.textureRebuilt -= this.Inner_CallBackTextureRebult;
-		}
-
-		/** Inner_CallBackTextureRebult
-		*/
-		private void Inner_CallBackTextureRebult(UnityEngine.Font a_font)
-		{
-			int ii_max = this.list.Length;
-			for(int ii=0;ii<ii_max;ii++){
-				if(this.list[ii].raw == a_font){
-					this.changetexture[ii] = true;
-				}
-			}
-		}
-
-		/** SetBuildRequest
-		*/
-		public void SetBuildRequest(int a_fontindex,bool a_flag)
-		{
-			this.buildrequest[a_fontindex] = a_flag;
-		}
-
-		/** コールバック。設定。
-		*/
-		public void SetCallBackBeforeBuild(CallBackBeforeBuild_Base a_callback)
-		{
-			this.callback_before.Add(a_callback);
-		}
-
-		/** コールバック。解除。
-		*/
-		public void UnSetCallBackBeforeBuild(CallBackBeforeBuild_Base a_callback)
-		{
-			this.callback_before.Remove(a_callback);
-		}
-
-		/** コールバック。設定。
-		*/
-		public void SetCallBackBeforeBuildWithBuildRequest(CallBackBeforeBuildWithBuildRequest_Base a_callback)
-		{
-			this.callback_before_with_buildrequest.Add(a_callback);
-		}
-
-		/** コールバック。解除。
-		*/
-		public void UnSetCallBackBeforeBuildWithBuildRequest(CallBackBeforeBuildWithBuildRequest_Base a_callback)
-		{
-			this.callback_before_with_buildrequest.Remove(a_callback);
-		}
-		
-		/** コールバック。設定。
-		*/
-		public void SetCallBackAfterBuild(CallBackAfterBuild_Base a_callback)
-		{
-			this.callback_after.Add(a_callback);
-		}
-
-		/** コールバック。解除。
-		*/
-		public void UnSetCallBackAfterBuild(CallBackAfterBuild_Base a_callback)
-		{
-			this.callback_after.Remove(a_callback);
-		}
-
-		/** フォント。取得。
-		*/
-		public UnityEngine.Font GetFont(int a_fontindex)
-		{
-			return this.list[a_fontindex].raw;
-		}
-
-		/** GetCharacterInfo
-		*/
-		public bool GetCharacterInfo(int a_fontindex,CharKey a_key,out UnityEngine.CharacterInfo a_characterinfo){
-			return this.list[a_fontindex].raw.GetCharacterInfo(a_key.code,out a_characterinfo,a_key.fontsize,a_key.fontstyle);
-		}
-
-		/** AddString
-		*/
-		public void AddString(int a_fontindex,CharKey[] a_string)
-		{
-			if(this.list[a_fontindex].AddString(a_string) == true){
-				this.buildrequest[a_fontindex] = true;
-			}
-		}
-
-		/** CancelString
-		*/
-		public void CancelString(int a_fontindex)
-		{
-			this.list[a_fontindex].CancelString();
-			this.buildrequest[a_fontindex] = false;
+			//callbacklist
+			this.callbacklist.Dispose();
+			this.callbacklist = null;
 		}
 
 		/** StartBuild
 		*/
 		public void StartBuild()
 		{
-			//直前コールバック呼び出し前にクリアする。
-			{
-				int ii_max = this.list.Length;
-				for(int ii=0;ii<ii_max;ii++){
-					this.list[ii].texture_hashset.Clear();
-				}
-			}
-
-			//フラグリセット。
-			{
-				int ii_max = this.changetexture.Length;
-				for(int ii=0;ii<ii_max;ii++){
-					this.changetexture[ii] = false;
-				}
+			//テクスチャー再ビルド検知フラグ。
+			int ii_max = this.fontlist.list.Length;
+			for(int ii=0;ii<ii_max;ii++){
+				this.fontlist.changetexture[ii] = false;
 			}
 		}
 
@@ -200,37 +68,45 @@ namespace BlueBack.Font
 		*/
 		public void EndBuild()
 		{
-			//ビルド直前。
+			//ビルド直前コールバック。
 			{
-				int ii_max = this.callback_before.Count;
+				int ii_max = this.callbacklist.callback_before.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_before[ii].CallBackBeforeBuild();
+					this.callbacklist.callback_before[ii].CallBackBeforeBuild();
 				}
 			}
 
-			//ビルド直前。
+			//文字追加コールバック。
 			{
-				int ii_max = this.callback_before_with_buildrequest.Count;
+				int ii_max = this.callbacklist.callback_addstring.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_before_with_buildrequest[ii].CallBackBeforeBuildWithBuildRequest(this.buildrequest);
+					this.callbacklist.callback_addstring[ii].CallBackAddString(this.fontlist.buildrequest);
 				}
 			}
 
-			//Build
+			//テクスチャーが再ビルドされた場合、CallBackChangeTextureが呼び出され、changetextureフラグがtrueになる。
 			{
-				int ii_max = this.list.Length;
+				int ii_max = this.fontlist.list.Length;
 				for(int ii=0;ii<ii_max;ii++){
-					if(this.buildrequest[ii] == true){
-						this.list[ii].Build();
+					if(this.fontlist.buildrequest[ii] == true){
+						this.fontlist.list[ii].Build();
 					}
 				}
 			}
 
-			//ビルド直後。
+			//ＵＶ再計算コールバック。
 			{
-				int ii_max = this.callback_after.Count;
+				int ii_max = this.callbacklist.callback_recalcuv.Count;
 				for(int ii=0;ii<ii_max;ii++){
-					this.callback_after[ii].CallBackAfterBuild(this.buildrequest,this.changetexture);
+					this.callbacklist.callback_recalcuv[ii].CallBackReCalcUv(this.fontlist.buildrequest,this.fontlist.changetexture);
+				}
+			}
+
+			//ビルドリクエスト。
+			{
+				int ii_max = this.fontlist.list.Length;
+				for(int ii=0;ii<ii_max;ii++){
+					this.fontlist.buildrequest[ii] = false;
 				}
 			}
 		}
