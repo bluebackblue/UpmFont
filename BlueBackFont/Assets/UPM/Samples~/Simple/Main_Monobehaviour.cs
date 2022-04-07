@@ -6,7 +6,7 @@ namespace BlueBack.Font.Samples.Simple
 {
 	/** Main_Monobehaviour
 	*/
-	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackBeforeBuildWithBuildRequest_Base , BlueBack.Font.CallBackAfterBuild_Base
+	public sealed class Main_Monobehaviour : UnityEngine.MonoBehaviour , BlueBack.Font.CallBackAddString_Base , BlueBack.Font.CallBackReCalcUv_Base
 	{
 		/** font
 		*/
@@ -61,9 +61,12 @@ namespace BlueBack.Font.Samples.Simple
 				BlueBack.Font.InitParam t_initparam = BlueBack.Font.InitParam.CreateDefault();
 				{
 					string[] t_fontname_list = UnityEngine.Font.GetOSInstalledFontNames();
+
+					#if(DEF_LISTUPOSFONTNAME)
 					for(int ii=0;ii<t_fontname_list.Length;ii++){
 						UnityEngine.Debug.Log(t_fontname_list[ii]);
 					}
+					#endif
 
 					t_initparam.stringbuffer_capacity = 1024;
 					t_initparam.font = new UnityEngine.Font[]{
@@ -79,10 +82,22 @@ namespace BlueBack.Font.Samples.Simple
 			{
 				BlueBack.Gl.InitParam t_initparam = BlueBack.Gl.InitParam.CreateDefault();
 				{
-					t_initparam.spritelist_max = 4;
+					t_initparam.spritelist = new Gl.InitParam.SpriteList[]{
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+					};
 					t_initparam.texture_max = 2;
 					t_initparam.material_max = 1;
-					t_initparam.sprite_max = 100;
 					t_initparam.camera_orthographic_size = 5.0f;
 					t_initparam.screenparam = BlueBack.Gl.ScreenTool.CreateScreenParamWidthStretch(VIRTUAL_SCREEN_W,VIRTUAL_SCREEN_H,UnityEngine.Screen.width,UnityEngine.Screen.height);
 				}
@@ -94,8 +109,8 @@ namespace BlueBack.Font.Samples.Simple
 				#endif
 
 				//texturelist
-				this.gl.texturelist.list[TEXTUREINDEX_1] = this.font.GetFont(FONTINDEX_1).material.mainTexture;
-				this.gl.texturelist.list[TEXTUREINDEX_2] = this.font.GetFont(FONTINDEX_2).material.mainTexture;
+				this.gl.texturelist.list[TEXTUREINDEX_1] = this.font.fontlist.GetFont(FONTINDEX_1).material.mainTexture;
+				this.gl.texturelist.list[TEXTUREINDEX_2] = this.font.fontlist.GetFont(FONTINDEX_2).material.mainTexture;
 					
 				//materialexecutelist
 				this.gl.materialexecutelist.list[MATERIALINDEX] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("Simple/Font"));
@@ -104,7 +119,7 @@ namespace BlueBack.Font.Samples.Simple
 			//uitext
 			{
 				UnityEngine.UI.Text t_uitext = UnityEngine.GameObject.Find("Text").GetComponent<UnityEngine.UI.Text>();
-				t_uitext.font = this.font.GetFont(FONTINDEX_1);
+				t_uitext.font = this.font.fontlist.GetFont(FONTINDEX_1);
 			}
 
 			//スプライト作成。
@@ -123,8 +138,8 @@ namespace BlueBack.Font.Samples.Simple
 			//ビルド。開始。
 			this.font.StartBuild();
 
-			this.font.AddString(FONTINDEX_1,this.charkey);
-			this.font.AddString(FONTINDEX_2,this.charkey);
+			this.font.fontlist.AddString(FONTINDEX_1,this.charkey);
+			this.font.fontlist.AddString(FONTINDEX_2,this.charkey);
 
 			//ビルド。終了。
 			this.font.EndBuild();
@@ -144,8 +159,8 @@ namespace BlueBack.Font.Samples.Simple
 			}
 
 			//コールバック登録。
-			this.font.SetCallBackBeforeBuildWithBuildRequest(this);
-			this.font.SetCallBackAfterBuild(this);
+			this.font.callbacklist.SetCallBackAddString(this);
+			this.font.callbacklist.SetCallBackReCalcUv(this);
 		}
 
 		/** Inner_CalcTexcordVertex
@@ -153,7 +168,7 @@ namespace BlueBack.Font.Samples.Simple
 		private void Inner_CalcTexcordVertex(int a_fontindex,ref BlueBack.Gl.SpriteBuffer a_spritebuffer,int a_x,int a_y,in BlueBack.Gl.ScreenParam a_screenparam)
 		{
 			UnityEngine.CharacterInfo t_characterinfo;
-			if(this.font.GetCharacterInfo(a_fontindex,this.charkey[0],out t_characterinfo) == true){
+			if(this.font.fontlist.GetCharacterInfo(a_fontindex,this.charkey[0],out t_characterinfo) == true){
 				//texcord
 				a_spritebuffer.texcord = Unity.Mathematics.math.float2x4(
 					Unity.Mathematics.math.float2(t_characterinfo.uvTopLeft.x,t_characterinfo.uvTopLeft.y),
@@ -175,38 +190,43 @@ namespace BlueBack.Font.Samples.Simple
 			}
 		}
 
-		/** [BlueBack.Font.CallBackBeforeBuildWithBuildRequest_Base]ビルド直前。
-
-			すべてのCallBackBeforeBuildが呼び出された後に呼び出される。
+		/** [BlueBack.Font.CallBackAddString_Base]文字追加コールバック。
 
 			a_buildrequest == true : ビルドリクエストあり。
 
 		*/
-		public void CallBackBeforeBuildWithBuildRequest(bool[] a_buildrequest)
+		public void CallBackAddString(bool[] a_buildrequest)
 		{
-			//ビルド時に含める文字列を追加する。
+			UnityEngine.Debug.Log("CallBackAddString");
 
 			if(a_buildrequest[FONTINDEX_1] == true){
-				this.font.AddString(FONTINDEX_1,this.charkey);
+				UnityEngine.Debug.Log("CallBackAddString : FONTINDEX_1");
+				this.font.fontlist.AddString(FONTINDEX_1,this.charkey);
 			}
+
 			if(a_buildrequest[FONTINDEX_2] == true){
-				this.font.AddString(FONTINDEX_2,this.charkey);
+				UnityEngine.Debug.Log("CallBackAddString : FONTINDEX_2");
+				this.font.fontlist.AddString(FONTINDEX_2,this.charkey);
 			}
 		}
 
-		/** [BlueBack.Font.CallBackAfterBuild_Base]ビルド直後。
+		/** [BlueBack.Font.CallBackReCalcUv_Base]ＵＶ再計算コールバック。
 
 			a_buildrequest == true		: ビルドリクエストあり。
 			a_changetexture == true		: フォントテクスチャーが再構築された。
 
 		*/
-		public void CallBackAfterBuild(bool[] a_buildrequest,bool[] a_changetexture)
+		public void CallBackReCalcUv(bool[] a_buildrequest,bool[] a_changetexture)
 		{
-			//vertex.uvを再計算する必要がある。
+			UnityEngine.Debug.Log("CallBackReCalcUv");
+
 			if(a_changetexture[FONTINDEX_1] == true){
+				UnityEngine.Debug.Log("CallBackReCalcUv : FONTINDEX_1");
 				Inner_CalcTexcordVertex(FONTINDEX_1,ref this.spriteindex_1.GetSpriteBuffer(),this.spriteindex1_x,this.spriteindex1_y,in this.gl.screenparam);
 			}
+
 			if(a_changetexture[FONTINDEX_2] == true){
+				UnityEngine.Debug.Log("CallBackReCalcUv : FONTINDEX_2");
 				Inner_CalcTexcordVertex(FONTINDEX_2,ref this.spriteindex_2.GetSpriteBuffer(),this.spriteindex2_x,this.spriteindex2_y,in this.gl.screenparam);
 			}
 		}
@@ -216,8 +236,8 @@ namespace BlueBack.Font.Samples.Simple
 		private void OnDestroy()
 		{
 			if(this.font != null){
-				this.font.UnSetCallBackBeforeBuildWithBuildRequest(this);
-				this.font.UnSetCallBackAfterBuild(this);
+				this.font.callbacklist.UnSetCallBackAddString(this);
+				this.font.callbacklist.UnSetCallBackReCalcUv(this);
 			}
 
 			if(this.spriteindex_1 != null){

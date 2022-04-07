@@ -15,7 +15,7 @@ MIT License
 * https://docs.unity3d.com/Packages/com.unity.mathematics@latest/index.html
 
 ## 動作確認
-Unity 2022.1.0b8
+Unity 2022.1.0b12
 
 ## UPM
 ### 最新

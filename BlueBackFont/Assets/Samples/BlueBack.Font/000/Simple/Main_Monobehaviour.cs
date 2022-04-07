@@ -82,10 +82,22 @@ namespace BlueBack.Font.Samples.Simple
 			{
 				BlueBack.Gl.InitParam t_initparam = BlueBack.Gl.InitParam.CreateDefault();
 				{
-					t_initparam.spritelist_max = 4;
+					t_initparam.spritelist = new Gl.InitParam.SpriteList[]{
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+						new Gl.InitParam.SpriteList(){
+							sprite_max = 100,
+						},
+					};
 					t_initparam.texture_max = 2;
 					t_initparam.material_max = 1;
-					t_initparam.sprite_max = 100;
 					t_initparam.camera_orthographic_size = 5.0f;
 					t_initparam.screenparam = BlueBack.Gl.ScreenTool.CreateScreenParamWidthStretch(VIRTUAL_SCREEN_W,VIRTUAL_SCREEN_H,UnityEngine.Screen.width,UnityEngine.Screen.height);
 				}
