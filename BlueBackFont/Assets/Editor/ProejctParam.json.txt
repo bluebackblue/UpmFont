@@ -6,7 +6,8 @@
     "git_path":"BlueBackFont/Assets/UPM",
     "discription_simple":"フォント操作",
     "discription_detal":[
-        "RequestCharactersInTexture",
+        "フォント操作",
+        "* RequestCharactersInTexture",
     ],
     "keyword":[
         "font"
