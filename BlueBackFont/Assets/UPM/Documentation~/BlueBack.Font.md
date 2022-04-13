@@ -1,5 +1,6 @@
 # BlueBack.Font
-RequestCharactersInTexture
+フォント操作
+* RequestCharactersInTexture
 
 ## ライセンス
 MIT License

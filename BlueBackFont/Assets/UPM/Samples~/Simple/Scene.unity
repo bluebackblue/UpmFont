@@ -236,9 +236,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1834c7ddd5cb74f8feb84f16323e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteindex_x: 0
-  spriteindex_y: 0
-  uitext: {fileID: 0}
+  spriteindex1_x: 0
+  spriteindex1_y: 0
+  spriteindex2_x: 0
+  spriteindex2_y: 0
 --- !u!4 &181593749
 Transform:
   m_ObjectHideFlags: 0
