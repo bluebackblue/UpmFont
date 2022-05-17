@@ -22,7 +22,7 @@ namespace BlueBack.Font.Editor
 
 		/** MenuItem_UpdatePackage_Develop
 		*/
-		#if(!DEF_USER_BLUEBACK_FONT)
+		#if(!USERDEF_BLUEBACK_FONT)
 		[UnityEditor.MenuItem("BlueBack/Font/UpdatePackage/Develop")]
 		#endif
 		public static void MenuItem_UpdatePackage_Develop()
@@ -40,7 +40,7 @@ namespace BlueBack.Font.Editor
 
 		/** MenuItem_UpdatePackage_Last
 		*/
-		#if(!DEF_USER_BLUEBACK_FONT)
+		#if(!USERDEF_BLUEBACK_FONT)
 		[UnityEditor.MenuItem("BlueBack/Font/UpdatePackage/Last " + Version.packageversion)]
 		#endif
 		public static void MenuItem_UpdatePackage_Last()

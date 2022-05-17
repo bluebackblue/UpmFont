@@ -2,6 +2,7 @@
 
 /** BlueBack.Font.Samples.Simple
 */
+#if(!DEF_BLUEBACK_FONT_SAMPLES_DISABLE)
 namespace BlueBack.Font.Samples.Simple
 {
 	/** Main_Monobehaviour
@@ -262,4 +263,5 @@ namespace BlueBack.Font.Samples.Simple
 		}
 	}
 }
+#endif
 
