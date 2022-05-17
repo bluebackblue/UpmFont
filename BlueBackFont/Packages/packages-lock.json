@@ -35,6 +35,13 @@
       "dependencies": {},
       "hash": "b732654d4c3a4b3d386c3b2b3a87ffc9927d7e0d"
     },
+    "blueback.poollist": {
+      "version": "https://github.com/bluebackblue/UpmPoolList.git?path=BlueBackPoolList/Assets/UPM",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3687c6df5451ad7b37c63912edac3574527d91df"
+    },
     "blueback.versionmanager": {
       "version": "https://github.com/bluebackblue/UpmVersionManager.git?path=BlueBackVersionManager/Assets/UPM",
       "depth": 0,
