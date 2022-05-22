@@ -22,7 +22,7 @@ namespace BlueBack.Font
 		/** font
 		*/
 		public UnityEngine.Font[] font;
-		 
+
 		/** CreateDefault
 		*/
 		public static InitParam CreateDefault()

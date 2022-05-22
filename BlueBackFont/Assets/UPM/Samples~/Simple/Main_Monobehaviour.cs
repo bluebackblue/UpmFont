@@ -112,7 +112,7 @@ namespace BlueBack.Font.Samples.Simple
 				//texturelist
 				this.gl.texturelist.list[TEXTUREINDEX_1] = this.font.fontlist.GetFont(FONTINDEX_1).material.mainTexture;
 				this.gl.texturelist.list[TEXTUREINDEX_2] = this.font.fontlist.GetFont(FONTINDEX_2).material.mainTexture;
-					
+
 				//materialexecutelist
 				this.gl.materialexecutelist.list[MATERIALINDEX] = new BlueBack.Gl.MaterialExecute_SImple(this.gl,UnityEngine.Resources.Load<UnityEngine.Material>("BlueBack.Font.Samples.Simple/Font"));
 			}

@@ -70,7 +70,7 @@ namespace BlueBack.Font
 		{
 			this.callback_addstring.Remove(a_callback);
 		}
-		
+
 		/** ＵＶ再計算コールバック。設定。
 		*/
 		public void SetCallBackReCalcUv(CallBackReCalcUv_Base a_callback)
