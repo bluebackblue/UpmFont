@@ -13,7 +13,7 @@ namespace BlueBack.Font
 {
 	/** Item
 	*/
-	public class Item : System.IDisposable
+	public sealed class Item : System.IDisposable
 	{
 		/** raw
 		*/
@@ -91,7 +91,7 @@ namespace BlueBack.Font
 				System.Text.StringBuilder t_stringbuffer;
 				{
 					if(this.addrequest_stringbuffer.TryGetValue(t_key_stringbuffer,out t_stringbuffer) == false){
-						#if(DEF_BLUEBACK_FONT_LOG)
+						#if(DEF_BLUEBACK_LOG)
 						DebugTool.Log(string.Format("AddString : NewFontSize : {0} : {1}",t_key_stringbuffer.fontsize,t_key_stringbuffer.fontstyle));
 						#endif
 						t_stringbuffer = new System.Text.StringBuilder(this.addrequest_capacity);
@@ -100,7 +100,7 @@ namespace BlueBack.Font
 				}
 
 				if(this.texture_hashset.Add(t_key) == true){
-					#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
+					#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 					DebugTool.Log(string.Format("AddString : Append : {0} : {1} : {2}",t_item.fontsize,t_item.fontstyle,t_item.code));
 					#endif
 					t_stringbuffer.Append(t_key.code);
@@ -121,7 +121,7 @@ namespace BlueBack.Font
 					this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
 					t_pair.Value.Clear();
 
-					#if((DEF_BLUEBACK_FONT_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
+					#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
 					DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.texture.width,this.texture.height,t_string));
 					#endif
 				}

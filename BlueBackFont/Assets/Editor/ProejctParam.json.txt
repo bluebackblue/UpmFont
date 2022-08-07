@@ -7,7 +7,7 @@
 	"discription_simple":"フォント操作",
 	"discription_detal":[
 		"フォント操作",
-		"* RequestCharactersInTexture",
+		"* RequestCharactersInTexture"
 	],
 	"keyword":[
 		"font"
