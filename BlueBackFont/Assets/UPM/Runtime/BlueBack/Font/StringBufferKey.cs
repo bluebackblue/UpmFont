@@ -40,15 +40,15 @@ namespace BlueBack.Font
 		{
 			if((this.fontsize == a_object.fontsize)&&(this.fontstyle == a_object.fontstyle)){
 
-				#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-				DebugTool.Log("StringBufferKey : Equals(StringBufferKey) : true");
+				#if(DEF_BLUEBACK_DETAIL)
+				DebugTool.Detail("StringBufferKey : Equals(StringBufferKey) : true");
 				#endif
 
 				return true;
 			}
 
-			#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log("StringBufferKey : Equals(StringBufferKey) : false");
+			#if(DEF_BLUEBACK_DETAIL)
+			DebugTool.Detail("StringBufferKey : Equals(StringBufferKey) : false");
 			#endif
 
 			return false;
@@ -60,15 +60,15 @@ namespace BlueBack.Font
 		{
 			if((a_object_l.fontsize == a_object_r.fontsize)&&(a_object_l.fontstyle == a_object_r.fontstyle)){
 
-				#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-				DebugTool.Log("StringBufferKey : static== : true");
+				#if(DEF_BLUEBACK_DETAIL)
+				DebugTool.Detail("StringBufferKey : static== : true");
 				#endif
 
 				return true;
 			}
 
-			#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log("StringBufferKey : static== : false");
+			#if(DEF_BLUEBACK_DETAIL)
+			DebugTool.Detail("StringBufferKey : static== : false");
 			#endif
 
 			return false;
@@ -80,15 +80,15 @@ namespace BlueBack.Font
 		{
 			if((a_object_l.fontsize == a_object_r.fontsize)&&(a_object_l.fontstyle == a_object_r.fontstyle)){
 
-				#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-				DebugTool.Log("StringBufferKey : static!= : false");
+				#if(DEF_BLUEBACK_DETAIL)
+				DebugTool.Detail("StringBufferKey : static!= : false");
 				#endif
 
 				return false;
 			}
 
-			#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log("StringBufferKey : static!= : true");
+			#if(DEF_BLUEBACK_DETAIL)
+			DebugTool.Detail("StringBufferKey : static!= : true");
 			#endif
 
 			return true;
@@ -100,8 +100,8 @@ namespace BlueBack.Font
 		{
 			int t_hash = (this.fontsize,(int)this.fontstyle).GetHashCode();
 
-			#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log(string.Format("StringBufferKey : GetHashCode : {0} : {1} : {2}",this.fontsize,this.fontstyle,t_hash));
+			#if(DEF_BLUEBACK_DETAIL)
+			DebugTool.Detail(string.Format("StringBufferKey : GetHashCode : {0} : {1} : {2}",this.fontsize,this.fontstyle,t_hash));
 			#endif
 
 			return t_hash;
@@ -113,8 +113,8 @@ namespace BlueBack.Font
 		{
 			int t_ret = (this.fontsize,(int)this.fontstyle).CompareTo((a_object.fontsize,(int)a_object.fontstyle));
 
-			#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-			DebugTool.Log(string.Format("StringBufferKey : CompareTo : {0}",t_ret));
+			#if(DEF_BLUEBACK_DETAIL)
+			DebugTool.Detail(string.Format("StringBufferKey : CompareTo : {0}",t_ret));
 			#endif
 
 			return t_ret;

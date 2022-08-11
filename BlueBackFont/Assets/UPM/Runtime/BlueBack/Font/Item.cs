@@ -92,7 +92,7 @@ namespace BlueBack.Font
 				{
 					if(this.addrequest_stringbuffer.TryGetValue(t_key_stringbuffer,out t_stringbuffer) == false){
 						#if(DEF_BLUEBACK_LOG)
-						DebugTool.Log(string.Format("AddString : NewFontSize : {0} : {1}",t_key_stringbuffer.fontsize,t_key_stringbuffer.fontstyle));
+						DebugTool.Log(string.Format("AddString : NewFontSize : {0} : {1} : {2}",t_key.fontsize,t_key.fontstyle,t_key.code));
 						#endif
 						t_stringbuffer = new System.Text.StringBuilder(this.addrequest_capacity);
 						this.addrequest_stringbuffer.Add(t_key_stringbuffer,t_stringbuffer);
@@ -100,8 +100,8 @@ namespace BlueBack.Font
 				}
 
 				if(this.texture_hashset.Add(t_key) == true){
-					#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-					DebugTool.Log(string.Format("AddString : Append : {0} : {1} : {2}",t_item.fontsize,t_item.fontstyle,t_item.code));
+					#if(DEF_BLUEBACK_LOG)
+					DebugTool.Log(string.Format("AddString : Append : {0} : {1} : {2}",t_key.fontsize,t_key.fontstyle,t_key.code));
 					#endif
 					t_stringbuffer.Append(t_key.code);
 					t_change = true;
@@ -121,8 +121,8 @@ namespace BlueBack.Font
 					this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
 					t_pair.Value.Clear();
 
-					#if((DEF_BLUEBACK_LOG)&&(DEF_BLUEBACK_FONT_FULLDEBUG))
-					DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.texture.width,this.texture.height,t_string));
+					#if(DEF_BLUEBACK_LOG)
+					DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.raw.material.mainTexture.width,this.raw.material.mainTexture.height,t_string));
 					#endif
 				}
 			}
