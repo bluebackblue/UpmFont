@@ -21,7 +21,7 @@ Unity 2022.1.0b16
 
 ## UPM
 ### 最新
-* https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM#0.0.18
+* https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM#0.0.19
 ### 開発
 * https://github.com/bluebackblue/UpmFont.git?path=BlueBackFont/Assets/UPM
 
