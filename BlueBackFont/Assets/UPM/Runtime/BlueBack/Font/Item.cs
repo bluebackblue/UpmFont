@@ -91,7 +91,7 @@ namespace BlueBack.Font
 				System.Text.StringBuilder t_stringbuffer;
 				{
 					if(this.addrequest_stringbuffer.TryGetValue(t_key_stringbuffer,out t_stringbuffer) == false){
-						#if(DEF_BLUEBACK_LOG)
+						#if(DEF_BLUEBACK_DEBUG_LOG)
 						DebugTool.Log(string.Format("AddString : NewFontSize : {0} : {1} : {2}",t_key.fontsize,t_key.fontstyle,t_key.code));
 						#endif
 						t_stringbuffer = new System.Text.StringBuilder(this.addrequest_capacity);
@@ -100,7 +100,7 @@ namespace BlueBack.Font
 				}
 
 				if(this.texture_hashset.Add(t_key) == true){
-					#if(DEF_BLUEBACK_LOG)
+					#if(DEF_BLUEBACK_DEBUG_LOG)
 					DebugTool.Log(string.Format("AddString : Append : {0} : {1} : {2}",t_key.fontsize,t_key.fontstyle,t_key.code));
 					#endif
 					t_stringbuffer.Append(t_key.code);
@@ -121,7 +121,7 @@ namespace BlueBack.Font
 					this.raw.RequestCharactersInTexture(t_string,t_pair.Key.fontsize,t_pair.Key.fontstyle);
 					t_pair.Value.Clear();
 
-					#if(DEF_BLUEBACK_LOG)
+					#if(DEF_BLUEBACK_DEBUG_LOG)
 					DebugTool.Log(string.Format("RequestCharactersInTexture : {0} : {1} : {2} : {3} : {4}",t_pair.Key.fontsize,t_pair.Key.fontstyle,this.raw.material.mainTexture.width,this.raw.material.mainTexture.height,t_string));
 					#endif
 				}
